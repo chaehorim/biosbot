@@ -11,7 +11,7 @@ public class BinanceTest {
 
 		String coinType = "LTCUSDT";
 		Binance bin = new Binance();
-		bin.validateMarket("", "");
+		bin.validateMarket("1izI2jQobHtUe1HBe1xn92su8xUrSwmF9OOpFXq8EnAeOXjUlEFOSKI9ptF59Kps", "rN9VtJAe0plWe0rxEWHqwC0bNbjkUggghcIOKQxYRlwM5SkOkQP0GuqAXlVL7RrP");
 
 		SimpleDateFormat time_formatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss.SSS");
 		System.out.println(bin.getServerTime() - System.currentTimeMillis());
