@@ -1,0 +1,59 @@
+
+	<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script>
+    $( document ).ready(function() {
+
+
+    });
+ 
+    </script>
+<title></title>
+<meta name="Generator" content="Cocoa HTML Writer">
+<meta name="CocoaVersion" content="1504.81">
+<style type="text/css">
+p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; line-height: 14.0px; font: 12.0px Times; color: #000000; -webkit-text-stroke: #000000}
+span.s1 {font-kerning: none}
+span.Apple-tab-span {white-space:pre}
+</style>
+</head>
+<body>
+currency : <input type="text" id="cur"> <br>
+
+bithumb-coin: <input type="text" id="bitbbuy"> <input type="text" id="bitbsell"> <br>
+
+bithumb-ethereum: <input type="text" id="bitebuy"> <input type="text" id="bitesell"> <br>
+
+aussie-bitcoin: <input type="text" id="aubbuy"><input type="text" id="aubsell"><br>
+
+aussie-ethereum: <input type="text" id="auebuy"><input type="text" id="auesell"><br>
+
+case1  : <input type="text" id="res1">
+<br> -- 한국에서 사서 호주에 파는 case <br>
+
+
+case 2 : <input type="text" id="res2">
+<br> -- 호주에서 사서 한국에 파는 case <br>
+
+
+
+calc : <button type="button" onclick="calc()">����</button>
+<script>
+function calc() {
+var cur = document.getElementById("cur").value;
+var yun = document.getElementById("yun").value;
+var bit = document.getElementById("bit").value;
+
+var result = (bit * cur - yun) / yun;
+
+document.getElementById("res").value = result;
+
+}
+</script>
+
+</body>
+</html>

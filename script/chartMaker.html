@@ -1,0 +1,142 @@
+
+	<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="./log/data.js"></script>
+<script>
+	var chart ;
+    $( document ).ready(function() {
+
+    	
+    chart = Highcharts.chart('container', {
+
+    title: {
+        text: 'Chart.update'
+    },
+
+    subtitle: {
+        text: 'Plain'
+    },
+    legend: {
+        layout: 'vertical',
+        align: 'right',
+        verticalAlign: 'middle'
+    },
+     xAxis: {
+		        type: 'datetime',
+    },
+    yAxis: {
+        title: {
+            text: 'Rainfall (mm)'
+        }
+    },
+    series: [{
+        type: 'column',
+        // colorByPoint: true,
+        data: [],
+        showInLegend: true
+    }, {
+        type: 'column',
+        // colorByPoint: true,
+        data: [],
+        showInLegend: true
+    }, {
+        type: 'column',
+        // colorByPoint: true,
+        data: [],
+        showInLegend: true
+    }, {
+        type: 'column',
+        // colorByPoint: true,
+        data: [],
+        showInLegend: true
+    }]
+
+	});
+	var initTime = getInitTime([riseSuccess, riseFail, downSuccess,downFail]);
+	var finalTime = getLastTime([riseSuccess, riseFail, downSuccess,downFail]);
+
+	var riseSuccData = calc(riseSuccess,initTime, finalTime);
+	var downSuccData = calc(downSuccess,initTime, finalTime);
+	var riseFailData = calc(riseFail,initTime, finalTime);
+	var downFailData = calc(downFail,initTime, finalTime);
+	console.log(riseSuccData);
+	console.log(downSuccData);
+	chart.series[0].update({	    
+		name:"rise success",
+		color: "blue",
+	    data: riseSuccData
+	}, true);
+	chart.series[1].update({	    
+		name:"down success",
+		color: "green",
+	    data: downSuccData
+	}, true);
+	chart.series[2].update({	    
+		name:"rise fail",
+		color: "red",
+	    data: riseFailData
+	}, true);
+	chart.series[3].update({	    
+		name:"down fail",
+		color: "pink",
+	    data: downFailData
+	}, true);
+});
+    </script>
+<title></title>
+
+
+</head>
+<body>
+	<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+	<script>
+		function getInitTime(firstDatas) {
+			var minTime = 2009529200
+			for (var i = 0, size = firstDatas.length; i < size; i ++) {
+				if (firstDatas[i][0] < minTime) 
+					minTime = firstDatas[0][i];
+			}
+			return minTime;
+		}
+
+		function getLastTime(lastDatas){
+			var maxTime = 0;
+			for (var i = 0, size = lastDatas.length; i < size; i ++) {
+				var lastDate = lastDatas[i][lastDatas[i].length -1];
+				if (lastDate > maxTime)
+					maxTime = lastDate;
+			}
+	
+			return maxTime + 7210;
+		}
+		function calc(input,initTime, finalTime) {
+			//var initTime = 1539529200;
+			console.log("xxx" + finalTime);
+			var increaseTime = 0.2 * 3600;
+			var tmpCnt = 0;
+			var data = [];
+
+			for (var i = initTime; i <= finalTime; i = i + increaseTime) {
+				var eachCnt = 0;
+				for (var j = 0, size = input.length; j < size; j ++) {
+					if (input[j] < i) {
+						eachCnt ++;					
+					}
+				}
+				var timeCnt = eachCnt - tmpCnt;
+				data.push([i * 1000, timeCnt]);
+				tmpCnt = eachCnt;				
+			}
+
+			return data;
+		}
+	</script>
+</body>
+</html>
