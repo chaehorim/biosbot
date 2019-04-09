@@ -29,12 +29,12 @@ time: {
         }
     },
     series: [{
-        type: 'column',
+        // type: 'column',
         // colorByPoint: true,
         data: [],
         showInLegend: true
     }, {
-        type: 'column',
+        // type: 'column',
         // colorByPoint: true,
         data: [],
         showInLegend: true
@@ -61,12 +61,14 @@ time: {
     }]
 
 	});
-	runChart();
+	// runChart();
 
-	$('#timeSelector').change(function() {
-		runChart();
-	});
+	// $('#timeSelector').change(function() {
+	// 	runChart();
+	// });
 
-    transformData();
+    var statdatas = transformData();
+    statDatas = extractDatas( $("#fromDate").val(), $("#toDate").val(), statdatas);
+    // drawChart(statdatas);
 
 });

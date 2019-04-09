@@ -10,14 +10,23 @@
 				continue;
 			console.log("set :" + tmpSet[idx]);
 			var tmpDatas = tmpSet[idx].split(":");
-			var statData = [tmpDatas[0], ((Number(tmpDatas[1]) + Number(tmpDatas[3])) / 2).toFixed(2)];
+			var statData = [parseInt(tmpDatas[0]), parseFloat(((Number(tmpDatas[1]) + Number(tmpDatas[3])) / 2).toFixed(2))];
 			statDatas.push(statData);
 			console.log(statDatas);
 		}
+		return statDatas;
 	}
 
 	// function arrange data by user input
+	function extractDatas(fromData, toData, tmpDatas) {
+		
+		var datum = new Date(Date.UTC(fromData.substring(0, 3),fromData.substring(4, 5),fromData.substring(4, 5),fromData.substring(6, 7),fromData.substring(8, 9),fromData.substring(10, 11)));
+		console.log(datum);
+		var statDatas = [];
 
+
+		return statDatas;
+	}
 
 	// function draw chart
 

@@ -9,9 +9,10 @@
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
 <script src="https://code.highcharts.com/modules/export-data.js"></script>
 <script src="./log/data.js"></script>
-<script src="./log/a.js"></script>
+<script src="./log/log.js"></script>
 <script src="./js/init.js"></script>
 <script src="./js/reader.js"></script>
+<script src="./js/draw.js"></script>
 <script src="./js/analyzer.js"></script>
 <script>
 
@@ -31,8 +32,8 @@
 	  <option value=86400>1d</option>
 	</select>
 
-	From  <input type="text" name="FromDate" value="201903200000"> 
-	To  <input type="text" name="ToDate" value="201903210000">
+	From  <input type="text" name="FromDate" id="fromDate" value="201903200000"> 
+	To  <input type="text" name="ToDate" id="toDate" value="201903210000">
 
 
 	<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>

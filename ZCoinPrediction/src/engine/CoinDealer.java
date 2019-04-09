@@ -79,6 +79,9 @@ public class CoinDealer {
 //				System.out.println("RUN" + deal);
 				DealManager.runDeal(CommonVariables.BASIC_TRADE_UNIT * deal.getBetUnit(), CommonVariables.BASIC_TRADE_COIN, deal, market, price);
 			}
+			
+			//5 post process
+			
 		}
 	}
 	
