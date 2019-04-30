@@ -20,6 +20,7 @@ import engine.dto.DealDTO;
 import engine.dto.DealType;
 import engine.dto.MarketPriceDTO;
 import engine.dto.Prediction;
+import engine.test.tool.FileSaver;
 
 public class Algorithm1Tester {
 	
@@ -34,7 +35,8 @@ public class Algorithm1Tester {
 	public static final  double IGNORE_MINCOST = 1;
 	private static Map<String,  List<String>> getFileNames() {
 //		String folderName = "C:\\work\\log\\bithumb.tar\\bithumb\\201809\\";
-		String folderName = "F:\\work\\log\\binance.tar\\detail\\";
+//		String folderName = "F:\\work\\log\\binance.tar\\detail\\";
+		String folderName = "./log/";
 		
 		File folder = new File(folderName);
 		File[] listOfFiles = folder.listFiles();
@@ -130,6 +132,7 @@ public class Algorithm1Tester {
 		return priceList;
 	}
 	public void run(double range, double aaRange) {
+		
 		Algorithm1 algo = new Algorithm1();
 		algo.setARange(Math.round(aaRange*100) /100.0);
 		algo.setRange(Math.round(range*100) /100.0);
@@ -167,6 +170,9 @@ public class Algorithm1Tester {
 					
 					algo.setQueueSize(PriceWindow.getQueueSize());
 					DealDTO deal = algo.run();
+					if (deal != null) {
+						FileSaver.saveToFile(deal, price.getTimeStamp());
+					}
 					if (deal == null || deal.getType() == DealType.NONE) 
 						continue;
 					Prediction pred = new Prediction();
@@ -258,7 +264,8 @@ public class Algorithm1Tester {
 	}
 	public static void main(String[] args) {
 		//STATISTICAL USE
-		
+		FileSaver.init();
+
 		long curTime = System.currentTimeMillis();
 		SimpleDateFormat time_formatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss.SSS");
 		System.out.println(time_formatter.format(curTime));
@@ -271,6 +278,7 @@ public class Algorithm1Tester {
 					PriceWindow.setQUEUE_SIZE(i);
 					Algorithm1Cache.setQueueSize(j);
 					Algorithm1Tester tester = new Algorithm1Tester();
+					FileSaver.saveToFile(i + "<" + j + "@");
 					tester.run(a, aa);
 //					tester.run(0.5, 0.5);
 					for (Map.Entry<String,Result> entry : tester.resultMap.entrySet())  
@@ -281,6 +289,7 @@ public class Algorithm1Tester {
 			}
 		}
 		System.out.println("cost Time : " + (System.currentTimeMillis() - curTime) / 6000);
+		FileSaver.finalizer();
 	}
 	
 	class Result{

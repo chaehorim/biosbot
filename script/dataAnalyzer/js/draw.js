@@ -5,4 +5,8 @@
 				color: "blue",
 			    data: datas
 			}, true);
+
+			chart.xAxis[0].isDirty = true;
+			                chart.redraw();
+
 		}
