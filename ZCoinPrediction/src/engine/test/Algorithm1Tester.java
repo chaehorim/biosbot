@@ -269,8 +269,8 @@ public class Algorithm1Tester {
 		long curTime = System.currentTimeMillis();
 		SimpleDateFormat time_formatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss.SSS");
 		System.out.println(time_formatter.format(curTime));
-		for (int j = 4; j < 7; j = j + 1) {
-		for (int i = 40; i < 55; i = i + 5) {
+		for (int j = 5; j < 6; j = j + 1) {
+		for (int i = 40; i < 45; i = i + 5) {
 			Algorithm1StatisticAnalyzer.init(0.5, 3, 0.5, 1.0, 9000);
 			for (double aa = 0.5; aa < 0.6; aa += 0.1 ) {
 				for (double a = 0.5; a < 0.6; a += 0.1) {
@@ -278,7 +278,7 @@ public class Algorithm1Tester {
 					PriceWindow.setQUEUE_SIZE(i);
 					Algorithm1Cache.setQueueSize(j);
 					Algorithm1Tester tester = new Algorithm1Tester();
-					FileSaver.saveToFile(i + "<" + j + "@");
+//					FileSaver.saveToFile(i + "<" + j + "@");
 					tester.run(a, aa);
 //					tester.run(0.5, 0.5);
 					for (Map.Entry<String,Result> entry : tester.resultMap.entrySet())  

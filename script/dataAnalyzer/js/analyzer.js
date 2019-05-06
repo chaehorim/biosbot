@@ -10,9 +10,29 @@
 				continue;
 			// console.log("set :" + tmpSet[idx]);
 			var tmpDatas = tmpSet[idx].split(":");
-			var statData = [parseInt(tmpDatas[0]), parseFloat(((Number(tmpDatas[1]) + Number(tmpDatas[3])) / 2).toFixed(2))];
+			var statData = [parseInt(tmpDatas[0]) * 1000, parseFloat(((Number(tmpDatas[1]) + Number(tmpDatas[3])) / 2).toFixed(2))];
 			statDatas.push(statData);
 			// console.log(statDatas);
+		}
+		return statDatas;
+	}
+
+	function transformVarAdata() {
+		var statDatas = [];
+		statDatas.push([]);
+		statDatas.push([]);
+
+		var tmpSet = aValue.split(":");
+
+		for (idx in tmpSet) {
+			if (tmpSet[idx] == '') 
+				continue;
+			// console.log("set :" + tmpSet[idx]);
+			var tmpDatas = tmpSet[idx].split(";");
+			var stat1Data = [parseInt(tmpDatas[0]), parseFloat(tmpDatas[1])];
+			var stat2Data = [parseInt(tmpDatas[0]), parseFloat(tmpDatas[2])];
+			statDatas[0].push(stat1Data);
+			statDatas[1].push(stat2Data);
 		}
 		return statDatas;
 	}

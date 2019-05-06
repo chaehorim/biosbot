@@ -14,6 +14,7 @@ public class FileSaver {
 	public static void init() {
 		try {
 			saveFile = new BufferedWriter(new FileWriter(saveFileName));
+			saveFile.write("var aValue ='");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -44,6 +45,7 @@ public class FileSaver {
 	
 	public static void finalizer() {
 		try {
+			saveFile.write("';");
 			saveFile.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
