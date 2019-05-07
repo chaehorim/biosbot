@@ -28,3 +28,13 @@
 			chart1.redraw();
 
 	}
+
+	function setFromTo(fromTime, toTime) {
+		var fromStr = timeStampToTime(fromTime);
+		var toStr = timeStampToTime(toTime);
+		console.log(fromStr);
+		console.log(toStr);
+		$("#fromDate").val(fromStr);
+		$("#toDate").val(toStr)
+
+	}

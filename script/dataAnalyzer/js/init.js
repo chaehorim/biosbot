@@ -1,16 +1,26 @@
 
 	var chart, chart1 ;
 
+    var statdatas, varaStats;
+
     $( document ).ready(function() {
 
+    Highcharts.setOptions({
+         global: {
+            useUTC: false
+        },
+        time: {
+            timezone: 'Australia/Sydney'
+        }
+    });
 
     chart = Highcharts.chart('container', {
 
     title: {
         text: 'Chart.update'
     },
-time: {
-        timezone: 'Australia/Sydney'
+    time: {
+       // timezone: 'Europe/Oslo'
     },
     subtitle: {
         text: 'Plain'
@@ -69,7 +79,7 @@ time: {
         text: 'Chart.update'
     },
 time: {
-        timezone: 'Australia/Sydney'
+        // timezone: 'Australia/Sydney'
     },
     subtitle: {
         text: 'Plain'
@@ -126,14 +136,25 @@ time: {
 	// 	runChart();
 	// });
 
-    var statdatas = transformData();
-    console.log(new Date(statdatas[0][0] * 1000) + statdatas[0][0] * 1000);
-    console.log(new Date(statdatas[statdatas.length -1][0] * 1000) + statdatas[statdatas.length -1][0] )
-    statDatas = extractDatas( $("#fromDate").val(), $("#toDate").val(), statdatas);
-
+    statdatas = transformData();
+    console.log(new Date(statdatas[0][0] ) + statdatas[0][0] );
+    console.log(new Date(statdatas[statdatas.length -1][0]) + statdatas[statdatas.length -1][0] )
+    var statDatas = extractDatas( $("#fromDate").val(), $("#toDate").val(), statdatas);
+    setFromTo(statdatas[0][0], statdatas[statdatas.length - 1][0]);
     drawChart(statdatas);
 
-    var varaStats = transformVarAdata();
+    varaStats = transformVarAdata();
     drawVara(varaStats);
+
+    $('#rangeSetter').click(function(){
+        var rangeDatas = extractDatas( $("#fromDate").val(), $("#toDate").val(), statdatas);
+        drawChart(rangeDatas);
+        var tmpVara = extractDatas( $("#fromDate").val(), $("#toDate").val(), varaStats[0]);
+        var tmpvaraa = extractDatas( $("#fromDate").val(), $("#toDate").val(), varaStats[1]);
+        var rangeVaraDatas = [tmpVara, tmpvaraa];
+        drawVara(rangeVaraDatas);
+
+
+    });
 
 });

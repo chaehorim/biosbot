@@ -18,6 +18,19 @@
 			// return maxTime + 7210;
 			return maxTime ;
 		}
+
+		function timeStampToTime(timestamp) {
+			var a = new Date(timestamp);
+			var year = a.getFullYear();
+			var month = "0" + (a.getMonth() + 1);
+			var date = "0" + a.getDate();
+			var hour = "0" + a.getHours();
+			var min = "0" + a.getMinutes();
+			var sec = "0" + a.getSeconds();
+			var time = year + '' + month.substr(-2) + '' + date.substr(-2) + '' + hour.substr(-2) + '' + min.substr(-2) + '' + sec.substr(-2) ;
+			console.log(timestamp + 'xxx' +a);
+			return time;
+		}
 		function calc(input,initTime, finalTime) {
 			//var initTime = 1539529200;
 			
