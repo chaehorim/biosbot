@@ -41,11 +41,11 @@
 	function extractDatas(fromData, toData, tmpDatas) {
 		
 		var fdat = new Date(Date.UTC(fromData.substring(0, 4),fromData.substring(4, 6)-1,fromData.substring(6, 8),fromData.substring(8, 10),fromData.substring(10, 12),fromData.substring(12, 14)));
-		 fdat.setHours( fdat.getHours() - 11 );
+		 fdat.setHours( fdat.getHours() - 10 );
 		var ftimestamp = fdat.getTime();
 		console.log(fromData + fdat + '' + ftimestamp);
 		var tdat = new Date(Date.UTC(toData.substring(0, 4),toData.substring(4, 6)-1,toData.substring(6, 8),toData.substring(8, 10),toData.substring(10, 12),toData.substring(12, 14)));
-		tdat.setHours( tdat.getHours() - 11 );
+		tdat.setHours( tdat.getHours() - 10 );
 		var ttimestamp = tdat.getTime();
 		console.log(toData + tdat +'' + ttimestamp);
 		

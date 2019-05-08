@@ -19,6 +19,16 @@
     title: {
         text: 'Chart.update'
     },
+    chart: {
+        events: {
+            click: function (event) {
+                alert(
+                    'x: ' + Highcharts.dateFormat('%Y-%m-%d', event.xAxis[0].value) + ', ' +
+                        'y: ' + event.yAxis[0].value
+                );
+            }
+        }
+    },
     time: {
        // timezone: 'Europe/Oslo'
     },
@@ -37,7 +47,7 @@
         title: {
             text: 'Rainfall (mm)'
         },
-         min: 195,
+         min: 160,
     },
     series: [{
         // type: 'column',
@@ -78,6 +88,7 @@
     title: {
         text: 'Chart.update'
     },
+
 time: {
         // timezone: 'Australia/Sydney'
     },

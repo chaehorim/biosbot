@@ -22,11 +22,17 @@ public class FileSaver {
 	
 	public static void saveToFile(DealDTO dto, long timeStamp) {
 		
-		Algorithm1Result result = (Algorithm1Result) dto.getResult();
-		if (result == null) 
-			return;
 		try {
-			saveFile.write(timeStamp + ";" + result.getStandard().getA() + ";" + result.getLatest().getA() + ":");
+			if (dto == null) {
+				saveFile.write(timeStamp + ";" + 0 + ";" + 0 + ":");  
+				return;
+			}
+			Algorithm1Result result = (Algorithm1Result) dto.getResult();
+			if (result == null) { 
+				saveFile.write(timeStamp + ";" + 0 + ";" + 0 + ":");  
+			} else {
+				saveFile.write(timeStamp + ";" + result.getStandard().getA() + ";" + result.getLatest().getA() + ":");
+			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
