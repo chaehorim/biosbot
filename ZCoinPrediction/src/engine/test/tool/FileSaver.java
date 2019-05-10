@@ -9,7 +9,7 @@ import engine.dto.DealDTO;
 
 public class FileSaver {
 	public static BufferedWriter saveFile = null;
-	private static  final String saveFileName = "./result/result.log";
+	private static  final String saveFileName = "./result/varA.js";
 	
 	public static void init() {
 		try {

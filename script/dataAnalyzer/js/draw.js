@@ -6,6 +6,18 @@
 			    data: datas
 			}, true);
 
+			var minVal = 10000000;
+			for (idx in datas) {
+				if (datas[idx][1] < minVal)
+					minVal = datas[idx][1];
+			}
+
+		 	chart.update({
+		        yAxis: {
+		            min: Math.floor(minVal / 3) * 3
+		        }
+		    });
+			
 			chart.xAxis[0].isDirty = true;
 			                chart.redraw();
 
