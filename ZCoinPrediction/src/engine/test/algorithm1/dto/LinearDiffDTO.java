@@ -1,5 +1,8 @@
 package engine.test.algorithm1.dto;
 
+import engine.analysis.alogorithm1.Algorithm1Result;
+import engine.dto.DealDTO;
+
 public class LinearDiffDTO {
 	private long startTime;
 	private long endTime;
@@ -12,6 +15,32 @@ public class LinearDiffDTO {
 	private double endA;
 	private double endAA;
 	
+	public void init(DealDTO deal, long timestamp, double price) {
+		this.startTime = timestamp;
+		this.startPrice = price;
+		this.diffMin = 10000;
+		this.diffMax = -10000;
+		this.startA = ((Algorithm1Result)deal.getResult()).getStandard().getA();
+		this.startAA = ((Algorithm1Result)deal.getResult()).getLatest().getA();
+	}
+
+	public void update(DealDTO deal) {
+		double diff =  ((Algorithm1Result)deal.getResult()).getLatest().getA()
+				- ((Algorithm1Result)deal.getResult()).getStandard().getA();
+		if (diff > this.diffMax) {
+			this.diffMax = diff;
+		}
+		if (diff < this.diffMin) {
+			this.diffMin = diff;
+		}
+	}
+	
+	public void finalizeDto(DealDTO deal, long timestamp, double price) {
+		this.endTime = timestamp;
+		this.endPrice = price;
+		this.endA = ((Algorithm1Result)deal.getResult()).getStandard().getA();
+		this.endAA = ((Algorithm1Result)deal.getResult()).getLatest().getA();
+	}
 	
 	public long getStartTime() {
 		return startTime;
@@ -72,6 +101,12 @@ public class LinearDiffDTO {
 	}
 	public void setEndAA(double endAA) {
 		this.endAA = endAA;
+	}
+
+	@Override
+	public String toString() {
+		return startTime + ":" + endTime + ":" + startPrice	+ ":" + endPrice + ":" + diffMin + ":" + diffMax + ":" + startA
+				+ ":" + startAA + ":" + endA + ":" + endAA + ";";
 	}
 	
 	

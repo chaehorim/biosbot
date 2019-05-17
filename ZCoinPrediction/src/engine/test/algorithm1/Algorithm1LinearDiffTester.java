@@ -20,9 +20,9 @@ import engine.analysis.alogorithm1.Algorithm1StatisticAnalyzer;
 import engine.analysis.alogorithm1.FunctionResult;
 import engine.analysis.statistic.PriceWindow;
 import engine.dto.DealDTO;
-import engine.dto.DealType;
 import engine.dto.MarketPriceDTO;
 import engine.test.Algorithm1Tester;
+import engine.test.algorithm1.dto.LinearDiffDTO;
 import engine.test.tool.FileSaver;
 
 public class Algorithm1LinearDiffTester {
@@ -32,9 +32,10 @@ public class Algorithm1LinearDiffTester {
 	public static int VALIDATE_PERIOD = 10 * 12;
 	public static final String marketName = "binance";
 	public static long totalCnt = 0;
-	
+	private static boolean functionSwitch = false;
 	private static Queue<FunctionResult> dealQueue = new LinkedList<FunctionResult>();
-	
+	private static LinearDiffDTO ldDto = new LinearDiffDTO();
+	private static List<LinearDiffDTO> linearList = new ArrayList<LinearDiffDTO>();
 	
 	//TEST
 	public static final  double IGNORE_MINCOST = 1;
@@ -142,7 +143,6 @@ public class Algorithm1LinearDiffTester {
 		algo.setARange(Math.round(aaRange*100) /100.0);
 		algo.setRange(Math.round(range*100) /100.0);
 		Map<String,  List<String>> fileMap = getFileNames();
-//		Map<String,  List<String>> fileMap = new HashMap<String, List<String>>();
 		
 		//TEST
 		for (Map.Entry<String,List<String>> entry : fileMap.entrySet()) {
@@ -160,11 +160,25 @@ public class Algorithm1LinearDiffTester {
 					
 					algo.setQueueSize(PriceWindow.getQueueSize());
 					DealDTO deal = algo.run();
-					if (deal != null) {
-						FileSaver.saveToFile(deal, price.getTimeStamp());
-					}
-					if (deal == null || deal.getType() == DealType.NONE) 
+					if (deal == null) {
+						functionSwitch = false;
 						continue;
+					}
+					if (functionSwitch) {
+						ldDto.update(deal);
+						if (turnOffCondition(deal)) {
+							ldDto.finalizeDto(deal, price.getTimeStamp(), price.getSellPrice());
+							linearList.add(ldDto);
+							FileSaver.saveToFile(ldDto.toString());
+							functionSwitch = false;
+						}
+					}else {
+						if (checkTurnonCondition(deal)) {
+							functionSwitch = true;
+							ldDto = new LinearDiffDTO();
+							ldDto.init(deal, price.getTimeStamp(), price.getBuyPrice());
+						}
+					}
 		
 				}
 			}
@@ -179,6 +193,8 @@ public class Algorithm1LinearDiffTester {
 		dealQueue.add(res.getLatest());
 		if (dealQueue.size() > 5) {
 			dealQueue.poll();
+		} else {
+			return false;
 		}
 		
 		if (res.getLatest().getA() > res.getStandard().getA()) {
@@ -195,6 +211,15 @@ public class Algorithm1LinearDiffTester {
 			return true;
 		}
 		
+		return false;
+	}
+	
+	// END Condition
+	private boolean turnOffCondition(DealDTO deal) {
+		Algorithm1Result res = (Algorithm1Result)deal.getResult();
+		if (res.getLatest().getA() < res.getStandard().getA()) {
+			return true;
+		}
 		return false;
 	}
 	
