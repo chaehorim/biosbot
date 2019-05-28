@@ -24,8 +24,8 @@ public class Algorithm1 implements Algorithm{
 	private double MIN_B = -100;
 	private double MAX_B = 100;
 	private final double increase = 0.1;
-	private double upperRange = 0.8;
-	private double downerRange = -0.8;
+	private double upperRange = 0.7;
+	private double downerRange = -0.7;
 	private double aUpperRange =  0.5;
 	private double aDownerRange =  -0.5;
 	private double outMinCost = 4000;
@@ -137,9 +137,9 @@ public class Algorithm1 implements Algorithm{
 	
 	private int calcBettingUnit(double a, double aa, DealType type) {
 		if (type == DealType.RISE) {
-			return 1;
+			return 10;
 		}
-		return 4;
+		return 2;
 	}
 	
 	public void setUpperRange(double upperRange) {

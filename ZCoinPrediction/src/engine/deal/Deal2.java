@@ -18,7 +18,7 @@ public class Deal2 extends Deal  {
 		sellOrder = dealer.marketSell(amount, dto.getSellPrice(), CommonVariables.BASIC_TRADE_COIN);
 		Thread.sleep(CommonVariables.DEAL_RUNNING_TIME);
 		
-		buyOrder = dealer.buyOrder(amount, Math.round(sellOrder.getPrice() * (1 - CommonVariables.BASIC_PROFIT) * 100) /100.0, CommonVariables.BASIC_TRADE_COIN);
+		buyOrder = dealer.buyOrder(amount, Math.round(sellOrder.getPrice() * (1 - CommonVariables.BASIC_PROFIT) * 1000000) /1000000.0, CommonVariables.BASIC_TRADE_COIN);
 		System.out.println("BUYOrder" + buyOrder );
 		System.out.println("SELLOrder" + sellOrder );
 		DealManager.addWaitingOrder(buyOrder);

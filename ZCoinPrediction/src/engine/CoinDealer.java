@@ -22,7 +22,7 @@ public class CoinDealer {
 	public static void init() {
 		// init market
 		market = MarketApiFactory.create("binance");
-		market.validateMarket("", "");		
+		market.validateMarket("8yhG6i7G0gkR7uJCpSJ41npWhcY9uNvl4anSQqIGwkmfSd9bcKSpLbZ2y6F6T4Gj", "TMs3ZmqzxoVa5xRJrWrR00dc25lvMUXOkU9ANg23O5RxdUqLgvZwfivQxogmIB2L");		
 		
 		// init Algorith
 		AlgorithmManager.init();

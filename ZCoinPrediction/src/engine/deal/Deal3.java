@@ -18,13 +18,17 @@ public class Deal3 extends Deal  {
 		
 		buyOrder = dealer.marketBuy(amount, 0d, CommonVariables.BASIC_TRADE_COIN);
 		Thread.sleep(CommonVariables.DEAL_RUNNING_TIME);
-		sellOrder = dealer.sellOrder(amount, Math.round(buyOrder.getPrice() * (1 + CommonVariables.BASIC_PROFIT) * 100) / 100.0, CommonVariables.BASIC_TRADE_COIN);
+		sellOrder = dealer.sellOrder(amount, Math.round(buyOrder.getPrice() * (1 + CommonVariables.BASIC_PROFIT) * 1000000) / 1000000.0, CommonVariables.BASIC_TRADE_COIN);
 		System.out.println("BUYOrder" + buyOrder );
 		System.out.println("SELLOrder" + sellOrder );
 		DealManager.addWaitingOrder(buyOrder);
 		DealManager.addWaitingOrder(sellOrder);
 	}
 	
+	
+	public static void main(String[] args) {
+		System.out.println((Math.round(0.031084 * (1 + CommonVariables.BASIC_PROFIT) * 1000000) / 1000000.0));
+	}
 	@Override
 	public String getDealId() {
 		return id;
