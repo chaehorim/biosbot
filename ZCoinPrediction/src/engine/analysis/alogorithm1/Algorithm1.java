@@ -74,6 +74,7 @@ public class Algorithm1 implements Algorithm{
 		} else if (standardAResult.getA() <= downerRange && AAResult.getA() <= aDownerRange) {
 			deal.setType(DealType.DOWN);
 		} else {
+			// set DealType.STEADY case Think when steady case is necessary
 			deal.setType(DealType.NONE);
 		}
 		

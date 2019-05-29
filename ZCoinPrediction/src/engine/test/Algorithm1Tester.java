@@ -173,7 +173,8 @@ public class Algorithm1Tester {
 					if (deal != null) {
 						FileSaver.saveToFile(deal, price.getTimeStamp());
 					}
-					if (deal == null || deal.getType() == DealType.NONE) 
+					// add deal run or not condition
+					if (deal == null || deal.getType() == DealType.NONE || checkDealRunCondition(price, procQueue, deal)) 
 						continue;
 					Prediction pred = new Prediction();
 					pred.setIndex(dataCount);
@@ -258,6 +259,40 @@ public class Algorithm1Tester {
 		}
 	}
 	
+	private static boolean checkDealRunCondition(MarketPriceDTO dto, List<Prediction> predList,DealDTO deal) {
+		double minPrice = Double.MAX_VALUE;
+		double maxPrice = Double.MIN_VALUE;
+		
+		for (Prediction pred : predList) {
+			if (pred.getSellPrice() < minPrice) {
+				minPrice = pred.getSellPrice();
+			}
+			if (pred.getBuyPrice() > maxPrice)
+				maxPrice = pred.getBuyPrice();
+		}
+		if (deal == null) {
+			return false;
+		}
+		switch(deal.getType()) {
+		case STEADY:
+			break;
+		case RISE:
+			if (dto.getSellPrice() > minPrice * 0.985) {
+				System.out.println("[OUT OF RANGE] price:[" + dto.getSellPrice() + "], minPrice:[" + minPrice + "]");
+				return false;
+			}
+			break;
+		case DOWN:
+			if (dto.getBuyPrice() < maxPrice * 1.015){
+				System.out.println("[OUT OF RANGE] price:[" + dto.getSellPrice() + "], minPrice:[" + minPrice + "]");
+				return false;
+			}
+			break;
+		case NONE :
+			break;
+		}
+		return true;
+	}
 	
 	public static void readCertainFile() {
 		readFile("C:\\work\\log\\bithumb.tar\\bithumb\\201809\\XRP20181012.dat", "bithumb");

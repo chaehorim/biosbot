@@ -58,11 +58,11 @@ public class DealManager {
 //			}
 //		}
 		
-		if (dealdto.getType() == DealType.DOWN && priceDTO.getBuyPrice() < maxOpenorderBuyPrice * 1.02) {
+		if (dealdto.getType() == DealType.DOWN && priceDTO.getBuyPrice() < maxOpenorderBuyPrice * 1.015) {
 			System.out.println("Current Price is " + priceDTO.getBuyPrice() + ", maxOpenorderBuyPrice " + maxOpenorderBuyPrice );
 			return false;
 		}
-		if (dealdto.getType() == DealType.RISE && priceDTO.getBuyPrice() > minOpenorderSellPrice * 0.98) {
+		if (dealdto.getType() == DealType.RISE && priceDTO.getBuyPrice() > minOpenorderSellPrice * 0.985) {
 			System.out.println("Current Price is " + priceDTO.getBuyPrice() + ", minOpenorderSellPrice " + minOpenorderSellPrice );
 			return false;
 		}
