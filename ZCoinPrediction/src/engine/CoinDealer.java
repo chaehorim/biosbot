@@ -26,7 +26,7 @@ public class CoinDealer {
 		
 		// init Algorith
 		AlgorithmManager.init();
-		
+		CommonVariables.init("XRPBTC");
 		TimerTask task = new TimerTask() {
 			@Override
 			public void run() {

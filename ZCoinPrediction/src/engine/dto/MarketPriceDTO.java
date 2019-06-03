@@ -41,6 +41,10 @@ public class MarketPriceDTO {
 	public void setTimeStamp(long timeStamp) {
 		this.timeStamp = timeStamp;
 	}
+	
+	public String getDateTime(){
+		return "" + time_formatter.format(timeStamp);
+	}
 
 	@Override
 	public String toString() {

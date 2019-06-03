@@ -21,7 +21,6 @@ import engine.analysis.alogorithm1.FunctionResult;
 import engine.analysis.statistic.PriceWindow;
 import engine.dto.DealDTO;
 import engine.dto.MarketPriceDTO;
-import engine.test.Algorithm1Tester;
 import engine.test.algorithm1.dto.LinearDiffDTO;
 import engine.test.tool.FileSaver;
 
@@ -171,12 +170,14 @@ public class Algorithm1LinearDiffTester {
 							linearList.add(ldDto);
 							FileSaver.saveToFile(ldDto.toString());
 							functionSwitch = false;
+							System.out.println("Finally End :[" + price.getPrice() + "] Time :" + price.getDateTime()  + "diff :" + (ldDto.getEndPrice() - ldDto.getStartPrice()));
 						}
 					}else {
 						if (checkTurnonCondition(deal)) {
+							System.out.println("Finally Start :[" + price.getPrice() + "] Time "+ price.getDateTime());
 							functionSwitch = true;
 							ldDto = new LinearDiffDTO();
-							ldDto.init(deal, price.getTimeStamp(), price.getBuyPrice());
+							ldDto.init(deal, price.getTimeStamp(), price.getPrice());
 						}
 					}
 		
@@ -190,6 +191,9 @@ public class Algorithm1LinearDiffTester {
 	private boolean checkTurnonCondition(DealDTO deal) {
 		
 		Algorithm1Result res = (Algorithm1Result)deal.getResult();
+		
+		if (res == null)
+			return false;
 		dealQueue.add(res.getLatest());
 		if (dealQueue.size() > 5) {
 			dealQueue.poll();
@@ -228,7 +232,7 @@ public class Algorithm1LinearDiffTester {
 		readFile("C:\\work\\log\\bithumb.tar\\bithumb\\201809\\XRP20181012.dat", "bithumb");
 	}
 	public static void main(String[] args) {
-		//STATISTICAL USE
+		//STATISTICAL USEㅌ
 		FileSaver.init();
 
 		long curTime = System.currentTimeMillis();
@@ -242,7 +246,7 @@ public class Algorithm1LinearDiffTester {
 					System.out.println("TIME:"  + i + " TIME2 : " + j +"a :" + a + ", aa : " + aa);
 					PriceWindow.setQUEUE_SIZE(i);
 					Algorithm1Cache.setQueueSize(j);
-					Algorithm1Tester tester = new Algorithm1Tester();
+					Algorithm1LinearDiffTester tester = new Algorithm1LinearDiffTester();
 					tester.run(a, aa);
 				}
 			}
