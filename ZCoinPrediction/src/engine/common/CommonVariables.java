@@ -9,10 +9,10 @@ public class CommonVariables {
 	public static final double BASIC_PROFIT = 0.005;
 	
 	public static void init(String coinType) {
-		if ("XRP".equals(coinType)) {
+		if ("XRPBTC".equals(coinType)) {
 			BASIC_TRADE_COIN = "XRPBTC";
 			BASIC_TRADE_UNIT = 250.0;
-		} else if ("ETH".equals(coinType)) {
+		} else if ("ETHBTC".equals(coinType)) {
 			BASIC_TRADE_COIN = "ETHBTC";
 			BASIC_TRADE_UNIT = 0.4;
 		}

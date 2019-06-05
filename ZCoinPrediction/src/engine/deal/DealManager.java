@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import engine.common.CommonDataCache;
+import engine.common.CommonVariables;
 import engine.dto.DealDTO;
 import engine.dto.DealType;
 import engine.dto.MarketPriceDTO;
@@ -88,6 +89,8 @@ public class DealManager {
 			
 		}
 		for (OrderDTO orderdto : openOrderList) {
+			if (!CommonVariables.BASIC_TRADE_COIN.equals(orderdto.getCoinType())) 
+				continue;
 			// check min max openorder price 
 			if ("BUY".equals(orderdto.getOrderType()) && maxOpenorderBuyPrice < orderdto.getPrice()) {
 				maxOpenorderBuyPrice  = orderdto.getPrice();

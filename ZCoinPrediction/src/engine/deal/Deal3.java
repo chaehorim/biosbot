@@ -20,7 +20,7 @@ public class Deal3 extends Deal  {
 		Thread.sleep(CommonVariables.DEAL_RUNNING_TIME);
 		
 		// FIXME: 
-		sellOrder = dealer.sellOrder(amount, Math.round(buyOrder.getPrice() * (1 + CommonVariables.BASIC_PROFIT) * 1000000) / 1000000.0, CommonVariables.BASIC_TRADE_COIN);
+		sellOrder = dealer.sellOrder(amount, Math.round(buyOrder.getPrice() * (1 + CommonVariables.BASIC_PROFIT) * 100000000) / 100000000.0, CommonVariables.BASIC_TRADE_COIN);
 		System.out.println("BUYOrder" + buyOrder );
 		System.out.println("SELLOrder" + sellOrder );
 		DealManager.addWaitingOrder(buyOrder);

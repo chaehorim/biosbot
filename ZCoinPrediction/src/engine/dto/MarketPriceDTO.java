@@ -48,7 +48,7 @@ public class MarketPriceDTO {
 
 	@Override
 	public String toString() {
-		return "MarketPriceDTO [timeStamp=" + time_formatter.format(timeStamp) + ", sellPrice=" + sellPrice + ", price=" + price + ", time="
-				+ timeStamp + "] + buyPrice=[" +  buyPrice+ "]";
+		return "MarketPriceDTO [timeStamp=" + time_formatter.format(timeStamp) + ", sellPrice=" + String.format("%.8f", sellPrice) + ", price=" + String.format("%.8f", price) + ", time="
+				+ timeStamp + "] + buyPrice=[" +  String.format("%.8f", buyPrice)+ "]";
 	}
 }

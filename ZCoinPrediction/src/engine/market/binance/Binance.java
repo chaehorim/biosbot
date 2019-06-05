@@ -1,5 +1,6 @@
 package engine.market.binance;
 
+import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -147,8 +148,8 @@ public class Binance implements MarketInterface{
 		
 		String signature = getSignature(param);
 		String result = HttpUtil.httpGet("binance", URI_ACCOUNT + "?" + param + "&signature=" + signature, getHttpHeader());
-
-		System.out.println(result);
+		logger.info(result);
+//		System.out.println(result);
 		if (StringUtils.isEmpty(result)) {
 			System.out.println("INVALID KEY");
 			return false;
@@ -171,7 +172,7 @@ public class Binance implements MarketInterface{
 		String signature = getSignature(param);
 		String result = HttpUtil.httpGet("binance", URI_ACCOUNT + "?" + param + "&signature=" + signature, getHttpHeader());
 
-		System.out.println(result);
+//		System.out.println(result);
 		if (StringUtils.isEmpty(result)) {
 			return false;
 		}
@@ -253,7 +254,7 @@ public class Binance implements MarketInterface{
 		param.put("type", "LIMIT");
 		param.put("timeInForce", "GTC"); 	
 		param.put("quantity", Double.toString(quantity));
-		param.put("price", Double.toString(price));	
+		param.put("price", String.format("%.8f", price));	
 		OrderDTO order = new OrderDTO();
 		order.setCoinType(coinType);
 		return placeOrder(param, order);
@@ -267,7 +268,7 @@ public class Binance implements MarketInterface{
 		param.put("type", "LIMIT");
 		param.put("timeInForce", "GTC"); 	
 		param.put("quantity", Double.toString(quantity));
-		param.put("price", Double.toString(price));	
+		param.put("price", String.format("%.8f", price));	
 		OrderDTO order = new OrderDTO();
 		order.setCoinType(coinType);
 		return placeOrder(param, order);
@@ -283,7 +284,7 @@ public class Binance implements MarketInterface{
 		
 		String result = HttpUtil.httpPost("binance", URI_ORDER, getHttpHeader(), param, ContentType.APPLICATION_FORM_URLENCODED);
 		
-		System.out.println(result);
+//		System.out.println(result);
 		if (StringUtils.isEmpty(result)) {
 			return null;
 		}
@@ -326,11 +327,11 @@ public class Binance implements MarketInterface{
 	@Override
 	public void orderResult(OrderDTO order) throws Exception {
 		String param = MessageFormat.format(PARAM_OPENORDER, order.getCoinType(), getNonce());
-		System.out.println(param);
+//		System.out.println(param);
 		String signature = getSignature(param);
 		String result = HttpUtil.httpGet("binance", URI_OPENORDER + "?" + param + "&signature=" + signature, getHttpHeader());
 		
-		System.out.println(result);
+//		System.out.println(result);
 		JsonParser parser = new JsonParser();
 		JsonObject root = parser.parse(result).getAsJsonObject();
 		
@@ -353,7 +354,7 @@ public class Binance implements MarketInterface{
 		String param = MessageFormat.format(PARAM_OPENORDER,  getNonce());
 		String signature = getSignature(param);
 		String result = HttpUtil.httpGet("binance", URI_OPENORDER + "?" + param + "&signature=" + signature, getHttpHeader());
-		System.out.println(result);
+//		System.out.println(result);
 		JsonParser parser = new JsonParser();
 		JsonArray orders = parser.parse(result).getAsJsonArray();
 		

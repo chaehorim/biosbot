@@ -27,6 +27,7 @@ public class Algorithm1Tester {
 	public static final double PROFIT_RANGE = 0.002;
 	public static final int MAX_QUEUE = 100;
 	public static int VALIDATE_PERIOD = 10 * 12;
+//	public static int VALIDATE_PERIOD = 24 * 60 * 12;
 	public Map<String, Result> resultMap = new HashMap<String, Result>();
 	public static final String marketName = "binance";
 	public static long totalCnt = 0;
@@ -36,7 +37,7 @@ public class Algorithm1Tester {
 	private static Map<String,  List<String>> getFileNames() {
 //		String folderName = "C:\\work\\log\\bithumb.tar\\bithumb\\201809\\";
 //		String folderName = "F:\\work\\log\\binance.tar\\detail\\";
-		String folderName = "./log/";
+		String folderName = "F:\\work\\log\\biabai4\\xrpbtc\\";
 		
 		File folder = new File(folderName);
 		File[] listOfFiles = folder.listFiles();
@@ -174,7 +175,7 @@ public class Algorithm1Tester {
 						FileSaver.saveToFile(deal, price.getTimeStamp());
 					}
 					// add deal run or not condition
-					if (deal == null || deal.getType() == DealType.NONE || checkDealRunCondition(price, procQueue, deal)) 
+					if (deal == null || deal.getType() == DealType.NONE) 
 						continue;
 					Prediction pred = new Prediction();
 					pred.setIndex(dataCount);
@@ -304,9 +305,9 @@ public class Algorithm1Tester {
 		long curTime = System.currentTimeMillis();
 		SimpleDateFormat time_formatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss.SSS");
 		System.out.println(time_formatter.format(curTime));
-		for (int j = 5; j < 6; j = j + 1) {
-		for (int i = 40; i < 45; i = i + 5) {
-			Algorithm1StatisticAnalyzer.init(0.5, 3, 0.5, 1.0, 9000);
+		for (int j = 5; j < 7; j = j + 1) {
+		for (int i = 40; i < 60; i = i + 5) {
+			Algorithm1StatisticAnalyzer.init(0.5, 3, 0.5, 2.0, 9000);
 			for (double aa = 0.5; aa < 0.6; aa += 0.1 ) {
 				for (double a = 0.5; a < 0.6; a += 0.1) {
 					System.out.println("TIME:"  + i + " TIME2 : " + j +"a :" + a + ", aa : " + aa);
