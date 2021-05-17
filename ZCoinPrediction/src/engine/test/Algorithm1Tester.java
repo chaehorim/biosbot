@@ -37,7 +37,7 @@ public class Algorithm1Tester {
 	private static Map<String,  List<String>> getFileNames() {
 //		String folderName = "C:\\work\\log\\bithumb.tar\\bithumb\\201809\\";
 //		String folderName = "F:\\work\\log\\binance.tar\\detail\\";
-		String folderName = "F:\\work\\log\\biabai4\\xrpbtc\\";
+		String folderName = "F:\\work\\log\\biabai4\\eoseth\\";
 		
 		File folder = new File(folderName);
 		File[] listOfFiles = folder.listFiles();

@@ -1,0 +1,33 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+	<bean id="customerDAO" class="com.chochae.afes.test.dao.impl.JdbcCustomerDAO">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<bean id="userDAO" class="com.chochae.afes.user.dao.impl.UserDAOImpl">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+	<bean id="marketDAO" class="com.chochae.afes.market.dao.impl.MarketDAOImpl">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+	<bean id="propertyDAO" class="com.chochae.afes.properties.dao.impl.PropertiesDAOImpl">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+	<bean id="currencyDAO" class="com.chochae.afes.currency.dao.impl.CurrencyDAOImpl">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+	<bean id="offerDAO" class="com.chochae.afes.offer.dao.impl.OfferDAOImpl">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+	<bean id="coinDAO" class="com.chochae.afes.coins.dao.impl.CoinDAOImpl">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+</beans>

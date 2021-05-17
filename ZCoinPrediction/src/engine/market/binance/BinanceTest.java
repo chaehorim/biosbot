@@ -9,9 +9,9 @@ public class BinanceTest {
 
 	public static void main(String[] args) {
 
-		String coinType = "LTCUSDT";
+		String coinType = "XRPBTC";
 		Binance bin = new Binance();
-		bin.validateMarket("1izI2jQobHtUe1HBe1xn92su8xUrSwmF9OOpFXq8EnAeOXjUlEFOSKI9ptF59Kps", "rN9VtJAe0plWe0rxEWHqwC0bNbjkUggghcIOKQxYRlwM5SkOkQP0GuqAXlVL7RrP");
+		bin.validateMarket("8yhG6i7G0gkR7uJCpSJ41npWhcY9uNvl4anSQqIGwkmfSd9bcKSpLbZ2y6F6T4Gj", "TMs3ZmqzxoVa5xRJrWrR00dc25lvMUXOkU9ANg23O5RxdUqLgvZwfivQxogmIB2L");
 
 		SimpleDateFormat time_formatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss.SSS");
 		System.out.println(bin.getServerTime() - System.currentTimeMillis());
@@ -20,7 +20,7 @@ public class BinanceTest {
 			System.out.println(bin.getMarketPrice(coinType, 0.1));
 //			System.out.println(bin.marketBuy(0.4, 88.0, coinType));
 //			System.out.println(bin.marketSell(0.4, 88.0, coinType));
-//			OrderDTO order = bin.buyOrder(0.2, 89.9, coinType);
+//			OrderDTO order = bin.buyOrder(0.5, 0.030060, coinType);
 //			OrderDTO order = bin.sellOrder(9, 92.9, coinType);
 //			OrderDTO order = new OrderDTO();
 //			order.setOrderId("149870529");
@@ -34,7 +34,7 @@ public class BinanceTest {
 			double totalCnt = 0;
 			for (OrderDTO orderStr : orderList) {
 				System.out.println(orderStr);
-				if ("ETHUSDT".equals(orderStr.getCoinType())) {
+				if ("ETHBTC".equals(orderStr.getCoinType())) {
 					if ("SELL".equals(orderStr.getOrderType())) {
 						totalAmount += orderStr.getAmount() * orderStr.getPrice();
 					} else 				 
@@ -45,14 +45,14 @@ public class BinanceTest {
 			totalAmount = 0;
 			totalCnt = 0;
 			for (OrderDTO orderStr : orderList) {
-				if ("LTCUSDT".equals(orderStr.getCoinType())) {
+				if ("XRPBTC".equals(orderStr.getCoinType())) {
 					if ("SELL".equals(orderStr.getOrderType())) {
 						totalAmount += orderStr.getAmount() * orderStr.getPrice();
 					} else 				 
 						totalCnt += orderStr.getAmount();
 				}
 			}
-			System.out.println("LTCUSDT : totalAmount: [" + totalAmount + "], totalCount :["  + totalCnt + "]");
+			System.out.println("XRPBTC : totalAmount: [" + totalAmount + "], totalCount :["  + totalCnt + "]");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
