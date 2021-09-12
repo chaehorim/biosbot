@@ -1,6 +1,7 @@
 package com.afes.ui;
 
 import java.io.IOException;
+import java.util.Queue;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,6 +15,9 @@ import org.apache.logging.log4j.Logger;
 import com.afes.util.JsonWriter;
 import com.afes.util.KeyValueData;
 
+import engine.analysis.statistic.PriceWindow;
+import engine.dto.MarketPriceDTO;
+
 @WebServlet("/Data")
 public class DataServlet extends HttpServlet{
 	private static final long serialVersionUID = 1L;
@@ -24,9 +28,13 @@ public class DataServlet extends HttpServlet{
     }
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("Shit~~");
 		String type = request.getParameter("datatype");
 		Object data = null;
+		
+		Queue<MarketPriceDTO> priceQueue = PriceWindow.getPriceStatistic();
+		logger.error("Shit~~" + priceQueue.size() + "   XX  " + type);
+		
+		
 		switch(type) {
 		case "user":
 			break;

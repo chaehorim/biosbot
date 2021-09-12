@@ -20,7 +20,7 @@ public class AfesInitializer implements ServletContextListener {
 	
 	@Override
 	public void contextInitialized(ServletContextEvent sce) {
-		logger.info("===============init==================");
+		logger.info("===============init x==================");
 		CoinDealer.init();
 	        
 //		java.sql.PreparedStatement pstmt = null;

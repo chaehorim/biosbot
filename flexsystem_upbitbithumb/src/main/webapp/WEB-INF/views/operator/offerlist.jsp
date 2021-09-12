@@ -1,0 +1,228 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; UTF-8">
+<title>Insert title here</title>
+
+		<script type="text/javascript" src="js/lib/jquery.1.9.1.min.js"></script>
+		<script type="text/javascript" src="js/lib/jquery.jqGrid.js"></script>
+		<script type="text/javascript" src="js/lib/bootstrap/bootstrap.min.js"></script>
+		<script type="text/javascript" src="js/lib/bootstrap-slider.js"></script>
+		<script type="text/javascript" src="js/lib/bootstrap-toggle.js"></script>
+		<script type="text/javascript" src="js/afes/common/common.js"></script>
+		<script type="text/javascript" src="js/afes/operator/offerList.js"></script>
+		<script type="text/javascript" src="js/lib/highcharts.js"></script>
+		<script src="js/lib/highcharts-more.js"></script>
+	
+		<link rel="stylesheet" type="text/css" href="css/lib/bootstrap/bootstrap.css">
+		<link rel="stylesheet" type="text/css" href="css/lib/bootstrap-slider.css">
+		<link rel="stylesheet" type="text/css" href="css/lib/bootstrap-toggle.css">
+		<link rel="stylesheet" type="text/css" href="css/afes/offer/offer.css">
+		<link rel="stylesheet" type="text/css" href="css/lib/ui.jqgrid.css">
+		<link rel="stylesheet" type="text/css" href="css/lib/jquery-ui.css">
+		<!-- Website CSS style -->
+</head>
+<body>
+	<script>var userSetting = '${userSetting}'</script>
+	<script>var marketAsset = '${marketAsset}'</script>
+	
+    <div id="menu" class="container" style="height:100px"> </div>
+    <div class="section">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <h1 class="text-left">Operator OfferList&nbsp;</h1>
+          </div>
+        </div>
+        <p></p>
+        <div class="row col-md-7">
+          <legend id="title2">환율</legend>
+          <div class="col-md-12">
+          	<div class="tab-pane" id="2b">
+      			 <table class="table">
+				    <thead>
+				      <tr>
+				        <th>거래소</th>
+				        <th>코인중류</th>
+				        <th>거래 금액</th>
+				        <th>환율</th>
+				        <th>이윤</th>
+				      </tr>
+				    </thead>
+				    <tbody>
+				      <tr class="success">
+				        <td id="btcMarkets">0</td>
+				        <td>비트코인</td>
+				        <td id="btcTradeVal">0</td>
+				        <td id="btcCurrency">0</td>
+				        <td id="btcProfit">0</td>
+				      </tr>      
+				      <tr class="danger">
+				        <td id="btcMarkets_reverse">0</td>
+				        <td>비트코인</td>
+				        <td id="btcTradeVal_reverse">0</td>
+				        <td id="btcCurrency_reverse">0</td>
+				        <td id="btcProfit_reverse">0</td>
+				      </tr>
+				      <tr class="success">
+				        <td id="ethMarkets">0</td>
+				        <td>이더리움</td>
+				        <td id="ethTradeVal">0</td>
+				        <td id="ethCurrency">0</td>
+				        <td id="ethProfit">0</td>
+				      </tr>
+				      <tr class="danger">
+				        <td id="ethMarkets_reverse">0</td>
+				        <td>이더리움</td>
+				        <td id="ethTradeVal_reverse">0</td>
+				        <td id="ethCurrency_reverse">0</td>
+				        <td id="ethProfit_reverse">0</td>
+				      </tr>
+				      <tr class="success">
+				        <td id="etcMarkets">0</td>
+				        <td>ETC</td>
+				        <td id="etcTradeVal">0</td>
+				        <td id="etcCurrency">0</td>
+				        <td id="etcProfit">0</td>
+				      </tr>
+				      <tr class="danger">
+				        <td id="etcMarkets_reverse">0</td>
+				        <td>ETC</td>
+				        <td id="etcTradeVal_reverse">0</td>
+				        <td id="etcCurrency_reverse">0</td>
+				        <td id="etcProfit_reverse">0</td>
+				      </tr>
+				      <tr class="success">
+				        <td id="ltcMarkets">0</td>
+				        <td>LTC</td>
+				        <td id="ltcTradeVal">0</td>
+				        <td id="ltcCurrency">0</td>
+				        <td id="ltcProfit">0</td>
+				      </tr>
+				      <tr class="danger">
+				        <td id="ltcMarkets_reverse">0</td>
+				        <td>LTC</td>
+				        <td id="ltcTradeVal_reverse">0</td>
+				        <td id="ltcCurrency_reverse">0</td>
+				        <td id="ltcProfit_reverse">0</td>
+				      </tr>
+				      <tr class="success">
+				        <td id="bchMarkets">0</td>
+				        <td>BCH</td>
+				        <td id="bchTradeVal">0</td>
+				        <td id="bchCurrency">0</td>
+				        <td id="bchProfit">0</td>
+				      </tr>
+				      <tr class="danger">
+				        <td id="bchMarkets_reverse">0</td>
+				        <td>BCH</td>
+				        <td id="bchTradeVal_reverse">0</td>
+				        <td id="bchCurrency_reverse">0</td>
+				        <td id="bchProfit_reverse">0</td>
+				      </tr>
+				    </tbody>
+				  </table>
+				  <div class="col-sm-6">
+				  </div>
+			</div>
+          </div>
+          <div class="col-sm-6">
+		</div>
+          <div class="col-md-7">
+          	<label for="name" class="cols-sm-2 control-label">order</label>
+          	<table id="orderList"></table>
+          </div>
+        </div>
+         <div class="row col-md-5 ">
+			<div class="form-group ">
+				          <!-- Form Name -->
+		          <legend>금액</legend>
+					          <!-- Form Name -->
+		           <div class="cols-sm-12">
+		            <label class="col-sm-4 control-label" for="textinput">거래소 명</label>
+		            <label class="col-sm-4 control-label" for="textinput" id="coinType">코인</label>
+		            <label class="col-sm-4 control-label" for="textinput">당지 화페</label>    						
+		          </div>
+		
+		
+		          <!-- Text input-->
+		          <!-- Text input-->
+		          <div id="amountForm">
+		          </div>
+		    </div>
+			<div class="form-group ">
+				          <!-- Form Name -->
+		          <legend>거래 코인</legend>
+					          <!-- Form Name -->
+               	  <div class="cols-sm-12">
+                    <div class="col-sm-6">
+                      <select class="form-control" id="currency">
+                        <option value="btc" selected>bitcoin</option>
+                        <option value="eth">ethereum</option>
+                        <option value="etc">ethereum classic</option>
+                        <option value="ltc">lite coin</option>  
+                        <option value="bch">bitcoin cache</option>                          
+                      </select>
+                    </div>
+                </div>
+ 				<legend>실제 환율</legend>
+					          <!-- Form Name -->
+               	  <div class="cols-sm-12">
+                    <div class="col-sm-6">
+                      <input id="realCurrency" type="text" size="5"/>
+                    </div>
+                </div>
+		    </div>	    
+		    
+   			<div class="form-group ">
+				          <!-- Form Name -->
+		        <legend>사용자 설정</legend>
+					          <!-- Form Name -->
+					          
+	            <div class="cols-sm-12">
+		            <label class="col-sm-4 control-label" for="textinput">거래 금액</label>
+		            <label class="col-sm-4 control-label" for="textinput">거래 환율</label>
+		            <label class="col-sm-4 control-label" for="textinput">거래 방향</label>
+   	            </div>
+		        <div class="cols-sm-4">
+					<div class="col-sm-4">
+						<input id="bidAmount" type="text" size="5"/>
+					</div>
+		        </div>
+		        <div class="cols-sm-4">
+					<div class="col-sm-4">
+						<input id="exchangeRate" type="text" size="5"/>
+					</div>
+		       </div>
+		       
+				<div class="col-sm-4">
+					 <select class="form-control" id="direction">
+                        <option from="86" to="82" value="86">중국 -> 한국</option>
+                        <option from="82" to="86" value="82">한국 -> 중국</option>       
+					 </select>
+				</div>        
+	            </div>
+			          
+    		    <div class="cols-sm-12">
+		            <label class="col-sm-6 control-label" for="textinput">거래 여부</label>
+		            <label class="col-sm-6 control-label" for="textinput">설정 변경</label>
+   	            </div>
+		        <div class="cols-sm-12">
+
+					<div class="col-sm-6">
+						<input id="toggle-one" checked type="checkbox" data-toggle="toggle">
+					</div>
+					<div class="col-sm-6">
+						<button type="button" onclick="sendUserSetting()">전송</button>
+					</div>
+		        </div>
+			
+		    </div>
+       </div>
+       </div>
+
+    
+  </div>
+</body>
+</html>
