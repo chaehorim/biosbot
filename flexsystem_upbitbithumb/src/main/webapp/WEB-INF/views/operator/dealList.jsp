@@ -62,10 +62,15 @@
           	<label for="name" class="cols-sm-2 control-label">log</label>
           	<table id="logList"></table>
           </div>
+          <div class="col-md-7">
+          	<label for="name" class="cols-sm-2 control-label">문제로그</label>
+          	<table id="riskyLogList"></table>
+          </div>
         </div>
          <div class="row col-md-5 ">
 		    
    			<div class="form-group ">
+   			<button type="button" onclick="runningCoinSetting()">거래코인 설정</button>
 				          <!-- Form Name -->
 		        <legend id="id="optionFromTag""> </legend>
 					          <!-- Form Name -->
@@ -127,6 +132,48 @@
        </div>
 
     
+  <div class="modal fade" id="runCoinDialog" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">마켓</h4>
+        </div>
+        <div class="modal-body">
+	         <div>
+				<div class="row main">
+					<div class="main-login main-center">
+						<form class="form-horizontal" method="post" action="#">
+							
+							<div class="form-group">
+								<label for="name" class="cols-sm-2 control-label">To market?</label>
+								<div class="cols-sm-12">
+									<div id="forwardDeal">
+									  <div class="cols-sm-12">
+									  	<div class="col-sm-12" id="runningCoinDiv">
+										  	<span class="col-sm-6">ADA</span>
+										  	<div class="col-sm-6">
+										  		<input class="toggle btn btn-primary" id="xxx" type="checkbox" data-toggle="toggle">
+									  		</div>
+									  	 </div>
+								  	 </div>  
+								  	 </div>  
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" id="updateRunningCoin">save</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      
+    </div>
   </div>
 </body>
 </html>

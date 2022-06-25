@@ -1,9 +1,12 @@
 package com.chochae.afes.asset.dao;
 
 public class AssetDto {
+	private String statDate;
 	private String coinType;
 	private double freeAmount;
 	private double totalAmount;
+	private String marketName;
+	
 	public String getCoinType() {
 		return coinType;
 	}
@@ -21,6 +24,20 @@ public class AssetDto {
 	}
 	public void setTotalAmount(double totalAmount) {
 		this.totalAmount = totalAmount;
+	}
+	
+	public String getStatDate() {
+		return statDate;
+	}
+	public void setStatDate(String statDate) {
+		this.statDate = statDate;
+	}
+	
+	public String getMarketName() {
+		return marketName;
+	}
+	public void setMarketName(String marketName) {
+		this.marketName = marketName;
 	}
 	@Override
 	public String toString() {

@@ -25,6 +25,7 @@ public class CoinManager {
 				continue;
 			}
 			if (coin.isUseYn()) {
+				coin.setRunningCoin(true);
 				dealCoinList.add(coin);
 			}
 		}
@@ -36,16 +37,51 @@ public class CoinManager {
 	public static List<CoinInfo> getDealCoinList() {
 		return dealCoinList;
 	}
- 	public static List<CoinOptionInfo> getCoinOptionList () {
-		for (CoinOptionInfo option : coinOptionList) {
-//			System.out.println(option);
+	public static CoinInfo getCoinByType(String coinId) {
+		for (CoinInfo coin : dealCoinList) {
+			if (coinId.equals(coin.getCoinType())) {
+				return coin;
+			}
 		}
-		return coinOptionList;
+		return null;
+	}
+	public static List<CoinInfo> getRunningCoinList() {
+		List<CoinInfo> tmpList = new ArrayList<CoinInfo>();
+		for (CoinInfo coin : dealCoinList) {
+			if (coin.isRunningCoin()) {
+				tmpList.add(coin);
+			}
+		}
+		return tmpList;
 	}
 	
+ 	public static List<CoinOptionInfo> getCoinOptionList () {
+		return coinOptionList;
+	}
+ 	
+ 	public static List<CoinOptionInfo> getRunningCoinOptionList() {
+ 		List<CoinOptionInfo> tmpList = new ArrayList<CoinOptionInfo>();
+ 		for (CoinOptionInfo option: coinOptionList) {
+ 			CoinInfo coin = getCoinByType(option.getCoinType());
+ 			if (coin != null && coin.isRunningCoin()) {
+ 				tmpList.add(option);
+ 			}
+ 		}
+ 		return tmpList;
+ 	}
+	
 	public static void updateCoin(List<CoinOptionInfo> optionList) {
-		CoinDAO coindao = DbLoader.getCoinDBConnection();
-		coinOptionList = optionList;
+		for (CoinOptionInfo newOption: optionList) {
+			for (CoinOptionInfo option: coinOptionList) {
+				if (option.getCoinType().equals(newOption.getCoinType()) && option.getFromMarket().equals(newOption.getFromMarket())) {
+					option.setBetAmount(newOption.getBetAmount());
+					option.setBetProfit(newOption.getBetProfit());
+					option.setActiveYn(newOption.isActiveYn());
+				} 
+			}
+		}
+		
+//		coinOptionList = optionList;
 //		coindao.updateCoinOptions(optionList);
 	}
 }

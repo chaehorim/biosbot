@@ -1,4 +1,4 @@
-package com.chochae.afes.market.company.bithumb;
+package com.chochae.afes.market.company.korbit;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -23,32 +23,27 @@ import com.chochae.afes.market.company.MarketInterface;
 import com.chochae.afes.market.company.dto.OrderBook;
 import com.chochae.afes.market.company.dto.OrderBookPrice;
 import com.chochae.afes.market.service.dto.TradeResultInfo;
-import com.chochae.afes.record.MsgCode;
-import com.chochae.afes.record.RecordManager;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-public class Bithumb implements MarketInterface{
-	private static final String marketName = "bithumb";
+public class Korbit implements MarketInterface{
+	private static final String marketName = "korbit";
 	private static final String STATUS_SUCCESS = "0000"; 
 	
-	private static Logger logger = LogManager.getLogger(Bithumb.class);
+	private static Logger logger = LogManager.getLogger(Korbit.class);
 	
-	private static final String URI_ROOT = "https://api.bithumb.com";
-	
-	private static final String URI_PUBLIC = "/public";
-	private static final String URI_INFO = "/info";
-	private static final String URI_TRADE = "/trade";
-	
-	private static final String URI_DEPTH = URI_PUBLIC + "/orderbook/";
-	private static final String URI_ASSET = URI_INFO + "/balance";
-	private static final String URI_TICKER = URI_PUBLIC + "/ticker/";
+	private static final String URI_ROOT = "https://api.korbit.co.kr/v1";
 	
 	
-	private static final String URI_MARKET_BUY = URI_TRADE + "/market_buy";
-	private static final String URI_MARKET_SELL = URI_TRADE + "/market_sell";
-	private static final String URI_ORDER_DETAIL = URI_INFO + "/order_detail";
+	private static final String URI_DEPTH = "/orderbook?currency_pair=";
+	private static final String URI_ASSET = "/balance";
+	private static final String URI_TICKER = "/ticker/";
+	
+	
+	private static final String URI_MARKET_BUY = "/market_buy";
+	private static final String URI_MARKET_SELL = "/market_sell";
+	private static final String URI_ORDER_DETAIL ="/order_detail";
 	
 	private String publicKey;
 	private String privateKey;
@@ -75,8 +70,7 @@ public class Bithumb implements MarketInterface{
 	@Override
 	public OrderBook getOrderBook(String coin, String baseCoin) {
 		OrderBook orderbook = null;
-		
-		String result = HttpUtil.httpGet(marketName, URI_ROOT + URI_DEPTH + coin + "_" + baseCoin);
+		String result = HttpUtil.httpGet(marketName, URI_ROOT + URI_DEPTH + coin.toLowerCase() + "_" + baseCoin.toLowerCase());
 		
 		if (StringUtils.isEmpty(result)) {
 			return orderbook;
@@ -85,25 +79,16 @@ public class Bithumb implements MarketInterface{
 		JsonParser parser = new JsonParser();
 		JsonObject root = parser.parse(result).getAsJsonObject();
 		
-		String status = root.get("status").getAsString();
+		double timestamp = root.get("timestamp").getAsDouble();
 		
-		if (!STATUS_SUCCESS.equals(status)) {
+		if (timestamp < 1386135077000L) {
 			logger.error(coin + " -" + baseCoin + " : " + result);
 			return orderbook;
 		}
 		
-		JsonObject data = (JsonObject)root.get("data");
 		orderbook = new OrderBook();
-		data.get("timestamp");
-		Long dataTime = Long.parseLong(data.get("timestamp").getAsString());
-		long timeGap = System.currentTimeMillis() - dataTime;
-		if (timeGap > 10 * 1000) {
-			logger.error("TIME GAP: " + timeGap);
-			RecordManager.addRecord(MsgCode.LONG_TIMEGAP, "TIMEGAP is " + timeGap / 1000, "bithumb", coin);
-			return null;
-		}
-		orderbook.bids = json2OrderBookPrice(data.getAsJsonArray("bids"));
-		orderbook.asks = json2OrderBookPrice(data.getAsJsonArray("asks"));
+		orderbook.bids = json2OrderBookPrice(root.getAsJsonArray("bids"));
+		orderbook.asks = json2OrderBookPrice(root.getAsJsonArray("asks"));
 		return orderbook;
 	}
 
@@ -344,11 +329,11 @@ public class Bithumb implements MarketInterface{
 		OrderBookPrice[] dpa = new OrderBookPrice[size];
 		
 		for (int i = 0; i < size; i++) {
-			JsonObject jo = (JsonObject)ja.get(i);
+			JsonArray jo = (JsonArray)ja.get(i);
 			OrderBookPrice dp = new OrderBookPrice();
 
-			dp.price = jo.get("price").getAsDouble();
-			dp.amount = jo.get("quantity").getAsDouble();
+			dp.price = jo.get(0).getAsDouble();
+			dp.amount = jo.get(1).getAsDouble();
 			dpa[i] = dp;
 		}
 		
@@ -357,9 +342,9 @@ public class Bithumb implements MarketInterface{
 
 	@Override
 	public double getPrice(String coinType, String baseCoin) {
-		String result = HttpUtil.httpGet(marketName, URI_ROOT + URI_TICKER + coinType + "_" + baseCoin);
+		String result = HttpUtil.httpGet(marketName, URI_ROOT + URI_TICKER + coinType + "_KRW");
 		
-		System.out.println(result);
+//		System.out.println(result);
 		return 0;
 	}
 

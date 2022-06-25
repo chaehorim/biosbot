@@ -1,6 +1,5 @@
 package com.chochae.afes.resource;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -8,9 +7,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -20,14 +16,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.chochae.afes.asset.AssetManager;
+import com.chochae.afes.asset.dao.AssetDAO;
+import com.chochae.afes.asset.dao.AssetDto;
 import com.chochae.afes.common.dto.ReturnMsg;
 import com.chochae.afes.resource.dto.AssetInfo;
+import com.chochae.afes.service.DbLoader;
 
 @Controller
 public class AssetController {
 	private static final Logger logger = LoggerFactory.getLogger(AssetController.class);
 	
-	@RequestMapping(value = "/assetManage", method = RequestMethod.GET)
+	@RequestMapping(value = "/assetSnapshot", method = RequestMethod.GET)
 	public String marketsJsp(Locale locale, Model model) {
 //		Map<String, AssetInfo> defaultAsset = ResourceManager.getDefaultAsset();
 //		Map<String, AssetInfo> currentAsset = ResourceManager.getCurrentAsset();
@@ -46,7 +46,30 @@ public class AssetController {
 //		} catch (IOException e) {
 //			e.printStackTrace();
 //		}
-		return "/manager/assetManage";
+		return "/operator/assetSnapshot";
+	}
+	
+	@RequestMapping(value = "/getAssetDate", method = RequestMethod.GET)
+	public @ResponseBody List<AssetDto> getAssetDate(HttpServletRequest request, ModelMap model) {
+		String fromDate = request.getParameter("fromDate");
+		String toDate = request.getParameter("toDate");
+		fromDate.replace("-", "");
+		toDate.replace("-", "");
+		AssetDAO assetDao = DbLoader.getAssetDBConnection();
+		List<AssetDto> fromAsset = assetDao.selectAssetList(fromDate);
+		model.addAttribute("fromAsset", fromAsset);
+		List<AssetDto> toAsset = null;
+		if (toDate == null || toDate.length() < 8) {
+			Map<String, List<AssetDto>> assetMap = AssetManager.getAssetMap();
+			List<AssetDto> tmpList = new ArrayList<AssetDto>();
+			for (Map.Entry<String, List<AssetDto>> entry : assetMap.entrySet()) {
+		        tmpList.addAll(entry.getValue());
+		    }
+		} else {
+			toAsset = assetDao.selectAssetList(toDate);
+		}
+		model.addAttribute("toAsset", toAsset);
+		return null;
 	}
 	
 	@RequestMapping(value = "/marketAsset", method = RequestMethod.GET)

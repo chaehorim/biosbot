@@ -58,11 +58,14 @@ public class DealManager {
 			return;
 		}
 		// 2. calculate
-		double profit1 = orderbookMap.get(toMarket.getMarketUserName()).bids[1].price * 100 / orderbookMap.get(fromMarket.getMarketUserName()).asks[1].price - 100;
-		double profit2 = orderbookMap.get(fromMarket.getMarketUserName()).bids[1].price * 100 / orderbookMap.get(toMarket.getMarketUserName()).asks[1].price - 100;
-//		if (profit1 > 0.5 || profit2 > 0.5) {
-//			AfesEngineManager.addSuccessCnt();
-//		}
+//		double profit1 = orderbookMap.get(toMarket.getMarketUserName()).bids[1].price * 100 / orderbookMap.get(fromMarket.getMarketUserName()).asks[1].price - 100;
+//		double profit2 = orderbookMap.get(fromMarket.getMarketUserName()).bids[1].price * 100 / orderbookMap.get(toMarket.getMarketUserName()).asks[1].price - 100;
+		double[] profits;
+		
+		profits = calculateProfit(orderbookMap);
+		
+		double profit1 = profits[0];
+		double profit2 = profits[1];
 
 		DealInfo offer1 = new DealInfo(curTime, fromMarket.getMarketUserName(), toMarket.getMarketUserName(), coin.getCoinType(), profit1, 1000000, orderbookMap.get(fromMarket.getMarketUserName()).asks[1].price, orderbookMap.get(toMarket.getMarketUserName()).bids[1].price);
 		AfesEngineManager.addOffer(offer1);
@@ -80,7 +83,7 @@ public class DealManager {
 			if (fromMarket.getMarketId().equals(option.getFromMarket()) && toMarket.getMarketId().equals(option.getToMarket()) && coin.getCoinType().equals(option.getCoinType())  && option.isActiveYn() ) {
 				offer1.setBetAmount(option.getBetAmount());
 				if ((option.getBetProfit() <= profit1 ) ){
-					System.out.println(option.getFromMarket() + " : " + option.getBetProfit() + " <--->" + profit1);
+//					System.out.println(option.getFromMarket() + " : " + option.getBetProfit() + " <--->" + profit1);
 					calculateAmount(offer1, option);
 					if (checkEnoughCoin(offer1, option)) {
 						if (AfesEngineManager.isTestMode())  {
@@ -95,7 +98,7 @@ public class DealManager {
 			if (toMarket.getMarketId().equals(option.getFromMarket()) && fromMarket.getMarketId().equals(option.getToMarket()) && coin.getCoinType().equals(option.getCoinType())  && option.isActiveYn() ) {
 				offer2.setBetAmount(option.getBetAmount());
 				if (option.getBetProfit() <= profit2) {
-					System.out.println(option.getFromMarket() + " : " + option.getBetProfit() + " <--->" + profit2);
+//					System.out.println(option.getFromMarket() + " : " + option.getBetProfit() + " <--->" + profit2);
 					calculateAmount(offer2, option);
 					if (checkEnoughCoin(offer2, option)) {
 						if (AfesEngineManager.isTestMode())  {
@@ -110,6 +113,21 @@ public class DealManager {
 		}
 	}
 	
+	private double[] calculateProfit(Map<String, OrderBook> orderbookMap ) {
+		double profit1 = orderbookMap.get(toMarket.getMarketUserName()).bids[1].price * 100 / orderbookMap.get(fromMarket.getMarketUserName()).asks[1].price - 100;
+		double profit2 = orderbookMap.get(fromMarket.getMarketUserName()).bids[1].price * 100 / orderbookMap.get(toMarket.getMarketUserName()).asks[1].price - 100;
+
+		double[] profits = {profit1, profit2};
+		return profits;
+	}
+	
+	private double[] calculateMinProfit(Map<String, OrderBook> orderbookMap) {
+		double profit1 = orderbookMap.get(toMarket.getMarketUserName()).bids[1].price * 100 / orderbookMap.get(fromMarket.getMarketUserName()).asks[1].price - 100;
+		double profit2 = orderbookMap.get(fromMarket.getMarketUserName()).bids[1].price * 100 / orderbookMap.get(toMarket.getMarketUserName()).asks[1].price - 100;
+
+		double[] profits = {profit1, profit2};
+		return profits;
+	}
 	private void calculateAmount(DealInfo offer, CoinOptionInfo option) {
 		offer.setBaseAmount(option.getBetAmount());
 		double pow = Math.pow(10, coin.getPointLength());
@@ -281,5 +299,31 @@ class priceGetThread extends Thread {
 		} else {
 			System.out.println(market.getMarketUserName());
 		}
+    }
+}
+
+class midPriceGetThread extends Thread {
+    public int processingCount = 0;
+    public MarketInfo market;
+    public CoinInfo coin;
+    public Double price;
+
+    midPriceGetThread(int processingCount, MarketInfo market, CoinInfo coin, Double price) {
+        this.processingCount = processingCount;
+        this.market = market;
+        this.coin = coin;
+        this.price = price;
+    }
+
+    @Override
+    public void run() {
+    	
+		MarketInterface marketConn = market.getMarketCon();
+//		OrderBook orderbook = marketConn.getOrderBook(coin.getCoinType(), CoinManager.BASE_COIN);
+//		if (orderbook != null) {
+//			orderbookMap.put(market.getMarketUserName(), orderbook);
+//		} else {
+//			System.out.println(market.getMarketUserName());
+//		}
     }
 }

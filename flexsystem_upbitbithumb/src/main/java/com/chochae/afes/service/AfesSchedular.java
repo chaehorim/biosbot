@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import com.chochae.afes.asset.AssetManager;
 import com.chochae.afes.currency.CurrencyManager;
 import com.chochae.afes.user.UserManager;
 
@@ -33,7 +34,7 @@ public class AfesSchedular {
 	    try {
 			Calendar date = Calendar.getInstance();
 			date.set(Calendar.AM_PM, Calendar.AM);
-			date.set(Calendar.HOUR, 10);
+			date.set(Calendar.HOUR, 5);
 			date.set(Calendar.MINUTE, 40);
 			date.set(Calendar.SECOND, 0);
 			date.set(Calendar.MILLISECOND, 0);
@@ -73,11 +74,8 @@ public class AfesSchedular {
 	static class OrderMonitor extends TimerTask {
 		public void run() {
 			try {
-				logger.info("[RESET]");
-				//OrderManager.checkOrders();
-				CurrencyManager.initCurrency();
-				UserManager.initUser();
-				UserManager.resetUserSetting();
+				logger.info("[INSERT]");
+				AssetManager.insertAsset();
 			} catch(Exception e) {
 		    	  e.printStackTrace();
 			}

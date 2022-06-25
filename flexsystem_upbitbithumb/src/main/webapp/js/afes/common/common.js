@@ -91,6 +91,7 @@ function floatRoundoff(sVal) {
 
 function changeColor(sVal) {
 	var str = '';
+	sVal  = sVal.toFixed(4);
 	if (sVal > 0){
 		str = '<p style="color:green">'+sVal+'</p>';
 	}

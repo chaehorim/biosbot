@@ -7,6 +7,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Service;
 
+import com.chochae.afes.asset.dao.AssetDAO;
 import com.chochae.afes.coins.dao.CoinDAO;
 import com.chochae.afes.currency.dao.CurrencyDAO;
 import com.chochae.afes.market.dao.MarketDAO;
@@ -62,5 +63,10 @@ public class DbLoader {
     public static CoinDAO getCoinDBConnection() {
     	getContext();
     	return (CoinDAO)context.getBean("coinDAO");
+    }
+    
+    public static AssetDAO getAssetDBConnection() {
+    	getContext();
+    	return (AssetDAO)context.getBean("assetDAO");
     }
 }

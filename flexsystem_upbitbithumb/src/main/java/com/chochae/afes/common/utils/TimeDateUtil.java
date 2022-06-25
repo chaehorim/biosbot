@@ -8,6 +8,10 @@ public class TimeDateUtil {
 		return ret;
 	}
 	
+	public static String getStatDay(long timestamp) {
+		String ret = new SimpleDateFormat("yyyyMMdd").format(timestamp);
+		return ret;
+	}
 	
 	public static void main(String[] args) {
 		System.out.println(getStatDate(System.currentTimeMillis()));

@@ -121,7 +121,7 @@ public class OfferDAOImpl implements OfferDAO{
 		String sql = "INSERT INTO deal(`STATDATE`,`FROM_MARKET`,`TO_MARKET`,`COINTYPE`,`BET_PROFIT`,`PROFIT`,`BET_AMOUNT`,`SEARCH_BUY_PRICE`,`SEARCH_SELL_PRICE`,`BUY_PRICE`,`SELL_PRICE`,`BASE_AMOUNT`,`COIN_AMOUNT`,`SUCCESS_YN`) VALUES" +
 				"(?, ?, ?, ?, ?, ? , ? ,?, ? ,?, ?,?, ?, ?)";
 		Connection conn = null;
-		System.out.println("GO" + deal);
+//		System.out.println("GO" + deal);
 		try {
 			conn = dataSource.getConnection();
 			PreparedStatement ps = conn.prepareStatement(sql);
@@ -139,6 +139,8 @@ public class OfferDAOImpl implements OfferDAO{
 			ps.setDouble(i++, deal.getSellPrice());
 			ps.setDouble(i++, deal.getBaseAmount());
 			ps.setDouble(i++, deal.getCoinAmount());
+//			ps.setDouble(i++, deal.getBuyMidPrice());
+//			ps.setDouble(i++, deal.getSellMidPrice());
 			ps.setString(i++, deal.isFinYn() ? "Y" : "N");
 			System.out.println(deal + " " +  deal.getBaseAmount());
 			ps.executeUpdate();

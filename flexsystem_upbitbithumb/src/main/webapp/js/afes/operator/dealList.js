@@ -14,6 +14,7 @@ var BID_RANGE = 0.02;
 var MAX_PROFIT_RANGE = 3;
 var chart;
 var positiveYn = false;
+var BASE_CURRENCY_INCREASE = 10000;
 
 function initTables() {
 	$("#offerFromList").jqGrid({
@@ -61,13 +62,14 @@ function initTables() {
 	});
 	
 	$("#dealList").jqGrid({
-		colNames:['시간','시작 마켓', '대상 마켓', '매도화페', '금액', '매수예상가격','매도예상가격', '예상이윤'],
+		colNames:['시간','시작 마켓', '대상 마켓', '매도화페','금액', '배팅이윤', '매수예상가격','매도예상가격', '예상이윤'],
 	   	colModel:[
 	   		{name:'time',  index:'startTime', width:120, formatter: timeStampToTimeString},  // 
 	   		{name:'fromMarket',index:'fromLocaleName', width:40},
 	   		{name:'toMarket',index:'toLocaleName', width:40},
 	   		{name:'coinType',index:'coinType', width:30},
-	   		{name:'amount',index:'buyAmout', width:60, formatter: floatRoundoff},
+	   		{name:'betAmount',index:'buyAmout', width:60, formatter: floatRoundoff},
+	   		{name:'betProfit',index:'betProfit', width:60, formatter: floatRoundoff},
 	   		{name:'buyPrice',index:'buyBcCnt', width:40, formatter: floatRoundoff},
 	   		{name:'sellPrice',index:'sellBcCnt', width:80},
 	   		{name:'profit',index:'profitPercentage', width:50, formatter: changeColor}//, formatter: percentRoundoff
@@ -100,6 +102,23 @@ function initTables() {
 	    caption: "Order List"
 	});
 	
+	$("#riskyLogList").jqGrid({
+		colNames:['시간','로그 내용', '대상 마켓', '코인종류'],
+	   	colModel:[
+	   		{name:'timeStamp',  index:'timeStamp', width:120, formatter: timeStampToLogTimeString},  // 
+	   		{name:'messageTxt',index:'messageTxt', width:240},
+	   		{name:'marketId',index:'sellBcCnt', width:80},
+	   		{name:'coinType',index:'coinType', width:30}
+	   	],
+	   	height : 200,
+//	   	rowNum:60,
+//	   	rowList:[10,20,30],
+//	   	sortname: 'id',
+	    viewrecords: true,
+	    sortorder: "desc",
+	    loadonce: true,
+	    caption: "Order List"
+	});
 }
 
 function initSchedular() {
@@ -130,12 +149,16 @@ function getUserOfferData() {
 			$('#offerToList').jqGrid('setGridParam', {data: tmpData['toData'], datatype: 'local'}).trigger('reloadGrid');
 			$('#dealList').jqGrid('setGridParam', {data: data['dealList'], datatype: 'local'}).trigger('reloadGrid');
 			$('#logList').jqGrid('setGridParam', {data: data['logList'], datatype: 'local'}).trigger('reloadGrid');
+			$('#riskyLogList').jqGrid('setGridParam', {data: data['riskyLogList'], datatype: 'local'}).trigger('reloadGrid');
 			var html = '';
 			$.each(data['coinAssetMap'], function(key, value) {
 				var point = 1;
 				var wan = 1;
 				if (key == 'BTC') {
 					point = 5;
+				}
+				if (key == 'ETH') {
+					point = 2;
 				}
 				if (key == 'KRW') {
 					wan = 10000;
@@ -144,7 +167,7 @@ function getUserOfferData() {
 				var num1 =  value[0] / wan;
 				var num2 = value[1] / wan;
 				var num3 = value[2] == null ? 0 : value[2]/ wan;
-				var num4 = (value[0] + value[1] + num3) / wan;
+				var num4 = (value[0] + value[1] ) / wan + + num3;
 				html +='<label class="col-sm-3 control-label" for="textinput">' + key + ' </label>' +
 	            '<label class="col-sm-2 control-label" for="textinput">' + num1.toFixed(point) + '</label>' +
 	            '<label class="col-sm-2 control-label" for="textinput">' + num2.toFixed(point) + '</label>' + 
@@ -210,7 +233,7 @@ function sendUserSetting() {
 		option['fromMarket'] = data[i]['fromMarket'];
 		option['toMarket'] = data[i]['toMarket'];
 		option['coinType'] = data[i]['coinType'];
-		option['betAmount'] = $('#' + prex + data[i]['coinType'] + "_amount").val();
+		option['betAmount'] = $('#' + prex + data[i]['coinType'] + "_amount").val() * BASE_CURRENCY_INCREASE;
 		option['betProfit'] = $('#' + prex + data[i]['coinType'] + "_profit").val();
 		option['activeYn'] =  $('#' + prex + data[i]['coinType'] + "_yn").is(':checked');
 		optionList.push(option);
@@ -236,9 +259,62 @@ function sendUserSetting() {
 	});
 }
 
+function runningCoinSetting() {
+	$.ajax({
+		type: "POST",
+		url: 'getDealCoin.do',
+		dataType:"json",
+		data: {},
+		success: function(data) {
+			$('#runCoinDialog').modal();
+			
+			
+			var html = '';
+			$.each(data, function(key, value) {
+				html += '<span class="col-sm-6">' + value['coinType'] + '</span>' +
+						'<div class="col-sm-6">' +
+						'<input class="toggle btn btn-primary" name="' + value['coinType'] + '" id="' + value['coinType'] + '_runYn" type="checkbox" data-toggle="toggle"></div>';
+			});
+			$('#runningCoinDiv').html(html);
+			$.each(data, function(key, value) {
+				if (value['runningCoin'] == true) {
+					$('#' + value['coinType']+ '_runYn').prop('checked', true);
+				}
+			});
+		},
+		error: function (e) {
+			alert('Connection Error');
+		}
+	});
+	
+}
 
 function initPopup() {
 	
+	$('#updateRunningCoin').on('click', function () {
+		var runCoins = [];
+		$.each($('#runningCoinDiv  input'), function(key, value) {
+			var coin = {};
+			coin['type'] = value['name'];
+			coin['runYn'] = $('#' + coin['type'] + "_runYn").is(':checked');
+			runCoins.push(coin);
+		});
+		var str = JSON.stringify(runCoins)
+		$.ajax({
+			type: "POST",
+			url: 'runningCoinSetting.do',
+			dataType:"json",
+			data: {runCoins : str
+			},
+			success: function(data) {
+				alert('변경 완료~');
+				location.reload();
+			},
+			error: function (e) {
+				alert('Connection Error');
+			}
+		});
+	});
 }
 
 function initSetting() {
@@ -266,7 +342,7 @@ function initSetting() {
 		} else {
 			$('#backward' + backward[i]['coinType']+ '_yn').prop('checked', false);
 		}
-		$('#backward' + backward[i]['coinType']+ '_amount').val(backward[i]['betAmount']);
+		$('#backward' + backward[i]['coinType']+ '_amount').val(backward[i]['betAmount'] /  BASE_CURRENCY_INCREASE);
 		$('#backward' + backward[i]['coinType']+ '_profit').val(backward[i]['betProfit']);
 	}
 	
@@ -280,7 +356,7 @@ function initSetting() {
 		} else {
 			$('#forward' + forward[i]['coinType']+ '_yn').prop('checked', false);
 		}
-		$('#forward' + forward[i]['coinType']+ '_amount').val(forward[i]['betAmount']);
+		$('#forward' + forward[i]['coinType']+ '_amount').val(forward[i]['betAmount'] / BASE_CURRENCY_INCREASE);
 		$('#forward' + forward[i]['coinType']+ '_profit').val(forward[i]['betProfit']);
 	}
 	if ('true' == tradeYn) {
@@ -295,8 +371,15 @@ function initSetting() {
 	$('#optionToTag').html(toMarket + ' -> ' + fromMarket);
 	$('#fromAsset').html(fromMarket);
 	$('#toAsset').html(toMarket);
-	$('#altAsset').html(altMarket);
-	$('#switchToMarket').html(' <option selected>' + toMarket + '</option><option >' + altMarket + '</option>');
+	$('#altAsset').html("other");
+	
+	var marketNames = JSON.parse(altMarket);
+	var str = ' <option selected>' + toMarket + '</option>';
+	for (num in marketNames) {
+		str += '<option >' + marketNames[num] + '</option>';
+	}
+	
+	$('#switchToMarket').html(str);
 	// $( "#myselect option:selected" ).text();
 }
 function switchMarket() {
@@ -307,7 +390,9 @@ function switchMarket() {
 		data: {altMarketName : $( "#switchToMarket option:selected" ).text()
 		},
 		success: function(data) {
-			alert();
+			alert('마켓 변경 완료');
+			location.reload();
+
 		},
 		error: function (e) {
 			alert('Connection Error');

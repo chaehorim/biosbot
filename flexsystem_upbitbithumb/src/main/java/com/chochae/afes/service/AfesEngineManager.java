@@ -29,7 +29,7 @@ public class AfesEngineManager {
 	private static  int offerCnt    = 0;
 	private static  long successCnt = 0;
 	
-	private static boolean testModeYn = true;
+	private static boolean testModeYn = false;
 	
 	
 	private static List<DealInfo>    offerList = new ArrayList<DealInfo>();
@@ -86,18 +86,23 @@ public class AfesEngineManager {
 		offerCnt++;
 		
 		
-		if (AfesEngineTrigger.prevTrigger()) {
-			if (offerCnt % 5 == 0) {
-				AssetManager.checkAsset();
+		try {
+			if (AfesEngineTrigger.prevTrigger()) {
+				if (offerCnt % 4 == 0) {
+					AssetManager.checkAsset();
+				}
+				List<CoinInfo> coinList = CoinManager.getRunningCoinList();
+				CoinInfo coin = coinList.get(sequence % coinList.size());
+				
+				MarketInfo fromMarket = MarketManager.getFromMarket();
+				MarketInfo toMarket = MarketManager.getToMarket();
+				DealManager man = new DealManager();
+				man.init(fromMarket, toMarket, coin);
+				man.startOffer();
 			}
-			List<CoinInfo> coinList = CoinManager.getDealCoinList();
-			CoinInfo coin = coinList.get(sequence % coinList.size());
-			
-			MarketInfo fromMarket = MarketManager.getFromMarket();
-			MarketInfo toMarket = MarketManager.getToMarket();
-			DealManager man = new DealManager();
-			man.init(fromMarket, toMarket, coin);
-			man.startOffer();
+		} catch(Exception e) {
+			System.out.println("Sorry, I am a bit lazy to do Concurrency Issue.");
+			e.printStackTrace();
 		}
 	}
 	
@@ -117,6 +122,9 @@ public class AfesEngineManager {
 		return testModeYn;
 	}
 	
+	public static void startTestMod() {
+		testModeYn = true;
+	}
 	public static void main(String[] args) {
 		CoinManager.init();
 		try {

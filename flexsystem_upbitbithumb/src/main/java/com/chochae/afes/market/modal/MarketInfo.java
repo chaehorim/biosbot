@@ -52,7 +52,6 @@ public class MarketInfo {
 		super();
 		this.marketId = marketId;
 		this.marketUserName = marketName;
-		this.currencyCode = CurrencyConstants.getCode(currencyName)  ;
 		this.currencyName = currencyName;
 		this.url = url;
 		this.amount = amount;

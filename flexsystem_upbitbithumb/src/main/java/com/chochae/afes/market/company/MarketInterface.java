@@ -13,7 +13,7 @@ public interface MarketInterface {
 	
 	public double getSellValue(String coinType, double amount);
 	
-	public double getPrice(String coinType, double amount);
+	public double getPrice(String coinType, String baseCoin);
 	
 	public OrderBook getOrderBook(String coinType, String baseCoin);
 	

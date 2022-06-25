@@ -30,4 +30,9 @@
 	<bean id="coinDAO" class="com.chochae.afes.coins.dao.impl.CoinDAOImpl">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
+	
+	<bean id="assetDAO" class="com.chochae.afes.asset.dao.impl.AssetDAOImpl">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
 </beans>

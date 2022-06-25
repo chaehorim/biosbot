@@ -57,7 +57,7 @@ public class Binance implements MarketInterface {
 	}
 
 	@Override
-	public double getPrice(String coinType, double amount) {
+	public double getPrice(String coinType, String baseCoin) {
 		return 0;
 	}
 

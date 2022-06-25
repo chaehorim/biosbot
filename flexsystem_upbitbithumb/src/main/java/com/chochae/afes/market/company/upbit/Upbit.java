@@ -249,7 +249,7 @@ public class Upbit implements MarketInterface {
             msg.setFinalPrice(getFinalPrice(msg.getTradeId()));
             return msg;
         } catch (Exception e) {
-        	System.out.println("upbit Sell trade Failed. [" + coinType +"],[" + amount + "], [" + price + "]" + str);
+        	System.out.println("upbit Buy trade Failed. [" + coinType +"],[" + amount + "], [" + price + "]" + str);
             e.printStackTrace();
             return msg;
 		}
@@ -383,7 +383,7 @@ public class Upbit implements MarketInterface {
 	}
 	
 	@Override
-	public double getPrice(String coinType, double amount) {
+	public double getPrice(String coinType, String baseCoin) {
 		
 		return 0;
 	}

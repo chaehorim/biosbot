@@ -5,14 +5,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.chochae.afes.asset.dao.AssetDAO;
 import com.chochae.afes.asset.dao.AssetDto;
 import com.chochae.afes.coins.CoinManager;
 import com.chochae.afes.coins.model.CoinInfo;
+import com.chochae.afes.common.utils.TimeDateUtil;
 import com.chochae.afes.market.modal.MarketInfo;
 import com.chochae.afes.market.service.MarketManager;
 import com.chochae.afes.offer.dto.DealInfo;
 import com.chochae.afes.record.MsgCode;
 import com.chochae.afes.record.RecordManager;
+import com.chochae.afes.service.DbLoader;
 
 public class AssetManager {
 	private static Map<String, List<AssetDto>>  assetMap = new HashMap<String, List<AssetDto>>();
@@ -32,12 +35,13 @@ public class AssetManager {
 	public static List<AssetDto> arrangeAssets(List<AssetDto> wholeList) {
 		List<AssetDto> assetList = new ArrayList<AssetDto>();
 		List<CoinInfo> coinList = CoinManager.getCoinList();
-		
 		for (CoinInfo coin : coinList) {
 			for (AssetDto asset : wholeList) {
-				if (asset.getCoinType().equals(coin.getCoinType())) {
-					assetList.add(asset);
-					break;
+				if (coin != null && asset != null) {
+					if (asset.getCoinType().equals(coin.getCoinType())) {
+						assetList.add(asset);
+						break;
+					}
 				}
 			}
 		}
@@ -50,6 +54,28 @@ public class AssetManager {
 	
 	public static Map<String, List<AssetDto>> getAssetMap() {
 		return assetMap;
+	}
+	
+	public static void insertAsset() {
+		String statDate = TimeDateUtil.getStatDay(System.currentTimeMillis());
+		List<AssetDto> assetList = new ArrayList<AssetDto>();
+		for (Map.Entry<String, List<AssetDto>> entity : assetMap.entrySet()) {
+			String marketName = entity.getKey();
+			List<AssetDto> dataList = entity.getValue();
+			for (AssetDto data : dataList) {
+				AssetDto asset = new AssetDto();
+				asset.setCoinType(data.getCoinType());
+				asset.setFreeAmount(data.getFreeAmount());
+				asset.setMarketName(marketName);
+				asset.setStatDate(statDate);
+				assetList.add(asset);
+			}
+		}
+		
+		if (assetList != null && assetList.size() > 0) {
+			AssetDAO assetDao = DbLoader.getAssetDBConnection();
+			assetDao.insertAssetList(assetList);
+		}
 	}
 	public static void updateAssumeAsset(DealInfo deal) {
 		synchronized(assetMap) {

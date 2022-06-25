@@ -54,7 +54,7 @@ public class OfferController {
 		setting.setUserId(userData.getUsername());
 		
 		List<UserAssetInfo> assetList = ResourceManager.getUserAssets(userData.getUsername());
-		List<CoinOptionInfo> coinlOptionList = CoinManager.getCoinOptionList();
+		List<CoinOptionInfo> coinlOptionList = CoinManager.getRunningCoinOptionList();
 
 		try {
 			String str = mapper.writeValueAsString(setting);
@@ -68,7 +68,7 @@ public class OfferController {
 			model.addAttribute("fromMarketId", MarketManager.getFromMarket().getMarketId());
 			model.addAttribute("toMarket", MarketManager.getToMarket().getMarketUserName());
 			model.addAttribute("toMarketId", MarketManager.getToMarket().getMarketId());
-			model.addAttribute("altMarket", getExtraMarket(AssetManager.getAssetMap()));
+			model.addAttribute("altMarket", mapper.writeValueAsString(getExtraMarket(AssetManager.getAssetMap())));
 		} catch (JsonGenerationException e) {
 			e.printStackTrace();
 		} catch (JsonMappingException e) {
@@ -91,6 +91,7 @@ public class OfferController {
 		offerData.setCoinAssetMap(makeCoinAssetMap(assetMap));
 		
 		offerData.setLogList(reverseRecords(RecordManager.getrRecordList()));
+		offerData.setRiskyLogList(reverseRecords(RecordManager.getrRiskyList()));
 		return offerData;
 	}
 	
@@ -100,7 +101,7 @@ public class OfferController {
 		String fromMarket = MarketManager.getFromMarket().getMarketUserName();
 		String toMarket = MarketManager.getToMarket().getMarketUserName();
 		boolean hasExtraAsset = false;
-		String extraMarket = "";
+		List<String> extraMarketList = new ArrayList<String>();
 		if (assetMap.size() > 2) {
 			hasExtraAsset = true;
 			for (Map.Entry<String, List<AssetDto>> entry : assetMap.entrySet()) {
@@ -108,7 +109,7 @@ public class OfferController {
 				if(marketName.equals(fromMarket) || marketName.equals(toMarket)) {
 					continue;
 				}
-				extraMarket = marketName;
+				extraMarketList.add(marketName);
 			}
 		}
 		for (CoinInfo coin : coinList) {
@@ -116,6 +117,7 @@ public class OfferController {
 			Double[] freeAsset = new Double[2];
 			if (hasExtraAsset) {
 				freeAsset = new Double[3];
+				freeAsset[2] = 0.0;
 			}
 			List<AssetDto> fromList = assetMap.get(fromMarket);
 			if (fromList != null){
@@ -135,11 +137,17 @@ public class OfferController {
 				}
 			}
 			if (hasExtraAsset) {
-				List<AssetDto> extraList = assetMap.get(extraMarket);
 				if (toList != null){
+					List<AssetDto> extraList = new ArrayList<AssetDto>();
+					for (String extraMarket : extraMarketList) {
+						List<AssetDto> tmpList = assetMap.get(extraMarket);
+						if (tmpList != null) {
+							extraList.addAll(tmpList);
+						}
+					}
 					for (AssetDto asset : extraList) {
 						if(coinType.equals(asset.getCoinType())) {
-							freeAsset[2] = asset.getFreeAmount();
+							freeAsset[2] = freeAsset[2] + asset.getFreeAmount();
 						}
 					}
 				}
@@ -149,7 +157,8 @@ public class OfferController {
 		return coinAssetMap;
 	}
 	
-	private String getExtraMarket(Map<String, List<AssetDto>> assetMap) {
+	private List<String> getExtraMarket(Map<String, List<AssetDto>> assetMap) {
+		List<String> marketList = new ArrayList<String>();
 		if (assetMap.size() > 2) {
 			String fromMarket = MarketManager.getFromMarket().getMarketUserName();
 			String toMarket = MarketManager.getToMarket().getMarketUserName();
@@ -158,10 +167,10 @@ public class OfferController {
 				if(marketName.equals(fromMarket) || marketName.equals(toMarket)) {
 					continue;
 				}
-				return marketName;
+				marketList.add(marketName);
 			}
 		}
-		return null;
+		return marketList;
 	}
 	private static List<DealInfo> reverseDeal(List<DealInfo> inputList) {
 		List<DealInfo> copy = new ArrayList<DealInfo>(inputList);
@@ -194,7 +203,7 @@ public class OfferController {
 			if (!validateCoinOption(option)) {
 				return false;
 			}
-			if (option.getBetProfit() > 10 || option.getBetProfit() < -1) {
+			if (option.getBetProfit() > 10 || option.getBetProfit() < -3) {
 				return false;
 			}
 			coinOptionList.add(option);
@@ -209,7 +218,7 @@ public class OfferController {
 	}
 	
 	private boolean validateCoinOption(CoinOptionInfo option) {
-		double maxVal = 2000000;
+		double maxVal = 3000000;
 		double minVal = 50000;
 		if ("BTC".equals(CoinManager.BASE_COIN)) {
 			maxVal = 0.1;
@@ -220,10 +229,33 @@ public class OfferController {
 		}
 		return true;
 	}
+	
 	@RequestMapping(value = "/switchToMarket", method = RequestMethod.POST)
 	public @ResponseBody boolean switchToMarket(HttpServletRequest request, ModelMap model) {
 		String altMarketName = request.getParameter("altMarketName");
 		MarketManager.switchToMarket(altMarketName);
 		return true;
+	}
+	 	
+	@RequestMapping(value = "/runningCoinSetting", method = RequestMethod.POST)
+	public @ResponseBody boolean setRunningCoinSetting(HttpServletRequest request, ModelMap model) {
+		String result = request.getParameter("runCoins");
+		JsonParser parser = new JsonParser();
+		JsonArray arr = parser.parse(result).getAsJsonArray();
+		
+		for (int i = 0, size = arr.size();i < size; i ++) {
+			JsonObject obj = arr.get(i).getAsJsonObject();
+			String coinType = obj.get("type").getAsString();
+			Boolean runYn = obj.get("runYn").getAsBoolean();
+			CoinInfo coin = CoinManager.getCoinByType(coinType);
+			coin.setRunningCoin(runYn);
+		}
+		return true;
+	}
+	
+	@RequestMapping(value = "/getDealCoin", method = RequestMethod.POST)
+	public @ResponseBody List<CoinInfo> getDealCoin(HttpServletRequest request, ModelMap model) {
+		List<CoinInfo> coinList = CoinManager.getDealCoinList();
+		return coinList;
 	}
 }

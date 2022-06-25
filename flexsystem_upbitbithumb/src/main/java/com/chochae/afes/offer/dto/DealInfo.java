@@ -17,6 +17,8 @@ public class DealInfo {
 	private double sellPrice;
 	private double baseAmount;
 	private double coinAmount;
+	private double buyMidPrice;
+	private double sellMidPrice;
 	private boolean finYn;
 	
 	public DealInfo() {
@@ -39,7 +41,23 @@ public class DealInfo {
 		this.finYn = false;
 	}
 
-
+	public DealInfo(long time, String fromMarket, String toMarket, String coinType, double betProfit, double betAmount,
+			double searchBuyPrice, double searchSellPrice, double buyMidPrice, double sellMidPrice) {
+		super();
+		this.statDate = TimeDateUtil.getStatDate(time);
+		this.time = time;
+		this.fromMarket = fromMarket;
+		this.toMarket = toMarket;
+		this.coinType = coinType;
+		this.betProfit = betProfit;
+		this.betAmount = betAmount;
+		this.searchBuyPrice = searchBuyPrice;
+		this.searchSellPrice = searchSellPrice;
+		this.buyMidPrice = buyMidPrice;
+		this.sellMidPrice = sellMidPrice;
+		this.finYn = false;
+	}
+	
 	public String getStatDate() {
 		return statDate;
 	}
@@ -131,13 +149,31 @@ public class DealInfo {
 		this.coinAmount = coinAmount;
 	}
 
+	public double getBuyMidPrice() {
+		return buyMidPrice;
+	}
+
+	public void setBuyMidPrice(double buyMidPrice) {
+		this.buyMidPrice = buyMidPrice;
+	}
+
+	public double getSellMidPrice() {
+		return sellMidPrice;
+	}
+
+	public void setSellMidPrice(double sellMidPrice) {
+		this.sellMidPrice = sellMidPrice;
+	}
+
 	@Override
 	public String toString() {
 		return "DealInfo [statDate=" + statDate + ", time=" + time + ", fromMarket=" + fromMarket + ", toMarket="
 				+ toMarket + ", coinType=" + coinType + ", betProfit=" + betProfit + ", profit=" + profit
 				+ ", betAmount=" + betAmount + ", searchBuyPrice=" + searchBuyPrice + ", searchSellPrice="
 				+ searchSellPrice + ", buyPrice=" + buyPrice + ", sellPrice=" + sellPrice + ", baseAmount=" + baseAmount
-				+ ", coinAmount=" + coinAmount + ", finYn=" + finYn + "]";
+				+ ", coinAmount=" + coinAmount + ", buyMidPrice=" + buyMidPrice + ", sellMidPrice=" + sellMidPrice
+				+ ", finYn=" + finYn + "]";
 	}
+
 	
 }

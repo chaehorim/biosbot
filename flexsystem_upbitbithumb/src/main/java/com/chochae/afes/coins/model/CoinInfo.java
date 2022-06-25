@@ -6,6 +6,7 @@ public class CoinInfo {
 	private int		pointLength;
 	private boolean isBaseCoin;
 	private boolean useYn;
+	private boolean isRunningCoin;
 	
 	public String getCoinType() {
 		return coinType;
@@ -37,6 +38,13 @@ public class CoinInfo {
 	}
 	public void setUseYn(boolean useYn) {
 		this.useYn = useYn;
+	}
+	
+	public boolean isRunningCoin() {
+		return isRunningCoin;
+	}
+	public void setRunningCoin(boolean isRunningCoin) {
+		this.isRunningCoin = isRunningCoin;
 	}
 	@Override
 	public String toString() {

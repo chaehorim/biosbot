@@ -15,6 +15,7 @@ public class OfferUserData {
 	private List<DealInfo> dealList;
 	private Map<String, Double[]>  coinAssetMap;
 	private List<RecordInfo>   logList;
+	private List<RecordInfo>   RiskyLogList;
 	private long		curTime;
 	
 	public OfferUserData() {
@@ -74,6 +75,12 @@ public class OfferUserData {
 	}
 	public void setLogList(List<RecordInfo> logList) {
 		this.logList = logList;
+	}
+	public List<RecordInfo> getRiskyLogList() {
+		return RiskyLogList;
+	}
+	public void setRiskyLogList(List<RecordInfo> riskyLogList) {
+		RiskyLogList = riskyLogList;
 	}
 	
 }
